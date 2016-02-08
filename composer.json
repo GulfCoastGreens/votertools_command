@@ -1,0 +1,19 @@
+{
+    "name": "gulfcoastgreens/votertools",
+    "description": "Description of project votertools.",
+    "authors": [
+        {
+            "name": "James Jones",
+            "email": "jamjon3@gmail.com"
+        }
+    ],
+    "require": {
+        "kherge/box": "2.5.3",
+        "symfony/console": "v2.7.6"
+    },
+    "autoload": {
+        "psr-4" : {
+            "gcg\\votertools\\" : "src/"
+        }
+    }
+}
