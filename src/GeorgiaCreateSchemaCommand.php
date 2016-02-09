@@ -20,5 +20,32 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @author jam
  */
 class GeorgiaCreateSchemaCommand extends Command {
-    //put your code here
+    public function __construct() {
+        $this->voterService = new \gcg\votertools\VoterService();
+        parent::__construct();
+    }
+    protected function configure() {
+        $this->setName("georgia:schema")
+            ->setDescription("Creates Schema for Georgia Voter Data.")
+            ->addArgument('fileName',InputArgument::OPTIONAL,'What is the roles filename?')
+            ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
+            ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
+            ->setHelp("Usage: <info>php console.php import:roles <env></info>");
+    }
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        
+        
+        if($filePath = $input->getArgument('fileName')) {
+            if (\file_exists($filePath)) {
+                $output->writeln("Importing roles from ".$input->getOption('type').": Started at ".date("F j, Y, g:i a"));
+                // $output->writeln($this->voterService->parseFileByType($filePath,'roles',$input->getOption('type')));
+                $output->writeln("Importing roles from ".$input->getOption('type').": Ended at ".date("F j, Y, g:i a"));
+            } else {
+                $output->writeln("ERROR: File does not exist!");
+            }
+        } else {
+            // $output->writeln($this->voterService->importRole(\json_decode(\file_get_contents("php://stdin"),true))->encode());            
+        }
+    }
 }
