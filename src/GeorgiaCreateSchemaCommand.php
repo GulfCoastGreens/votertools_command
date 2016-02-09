@@ -34,7 +34,7 @@ class GeorgiaCreateSchemaCommand extends Command {
             ->setHelp("Usage: <info>php console.php import:roles <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
-        
+        $output->writeln($this->countyCodes());
         
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
@@ -48,4 +48,7 @@ class GeorgiaCreateSchemaCommand extends Command {
             // $output->writeln($this->voterService->importRole(\json_decode(\file_get_contents("php://stdin"),true))->encode());            
         }
     }
+    public function countyCodes() {
+        return file_get_contents(__DIR__ . "/../schema/georgia/CountyCodes.sql");
+    } 
 }
