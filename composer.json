@@ -10,5 +10,10 @@
     "require": {
         "symfony/console": "v2.7.6",
         "kherge/box": "2.5.3"
+    },
+    "autoload": {
+        "psr-4" : {
+            "gcg\\votertools\\" : "src/"
+        }
     }
 }
