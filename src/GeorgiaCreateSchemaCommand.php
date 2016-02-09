@@ -51,4 +51,8 @@ class GeorgiaCreateSchemaCommand extends Command {
     public function countyCodes() {
         return file_get_contents(__DIR__ . "/../schema/georgia/CountyCodes.sql");
     } 
+    public function voters() {
+        return file_get_contents(__DIR__ . "/../schema/georgia/Voters.sql");
+    } 
+    
 }
