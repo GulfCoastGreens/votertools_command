@@ -6,15 +6,54 @@
  * and open the template in the editor.
  */
 
-namespace gcg\votertools;
+namespace GCG\votertools;
 
 /**
  * Description of VoterService
  *
  * @author jam
  */
-class VoterService {
+class VoterService extends \GCG\Core\Connection {
+    use VoterFormating;
     public $dbh;
+    
+    public $connectionName;
+    public $config;
+    public function setConnectionName($connectionName) {
+        $this->connectionName = $connectionName;
+    }
+    public function setConfigFolder($folder) {
+        $this->config = new \Configula\Config($folder); 
+        parent::setConfigFolder($folder);
+    }
+    
+    public function getSQLFor($filename) {
+        return \file_get_contents("sql/". $filename .".sql");
+    }
+    public function georgiaCreateSchema() {
+        $stmt = $this->getConnection($this->connectionName)->pdo->prepare($this->getSQLFor("georgia/CountyCodes"));
+        if ($stmt->execute()) {
+            echo "Success";
+        } else {
+            echo "Fail";
+        }
+    }
+    public function initializeGeorgiaVoterTable() {
+        $query = \file_get_contents("sql/GeorgiaVotersTable.sql");
+        $stmt = $this->getConnection($this->connectionName)->pdo->prepare($query);
+
+        if ($stmt->execute()) {
+            echo "Success";
+        } else {
+            echo "Fail";
+        }
+    }
+
+    
+    
+    
+    
+    
     public function build($user,$passwd,$dsn) {
         $this->settings = parse_ini_file("settings.ini", true);
         $this->dbh = new PDO(

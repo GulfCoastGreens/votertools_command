@@ -15,7 +15,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 // import the Symfony Console Application 
 use Symfony\Component\Console\Application; 
-use gcg\votertools\GeorgiaCreateSchemaCommand;
+use GCG\votertools\GeorgiaCreateSchemaCommand;
 
 
 $app = new Application();

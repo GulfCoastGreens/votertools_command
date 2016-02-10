@@ -21,7 +21,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  */
 class GeorgiaCreateSchemaCommand extends Command {
     public function __construct() {
-        $this->voterService = new \gcg\votertools\VoterService();
+        $this->voterService = new \GCG\votertools\VoterService();
         parent::__construct();
     }
     protected function configure() {
@@ -34,7 +34,10 @@ class GeorgiaCreateSchemaCommand extends Command {
             ->setHelp("Usage: <info>php console.php import:roles <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln($this->countyCodes());
+        // $output->writeln($this->countyCodes());
+        // $output->writeln($this->getSchemaFor("georgia/CountyCodes"));
+        // $output->writeln($this->getSchemaFor("georgia/Voters"));
+        $output->writeln($this->voterService->getSQLFor("georgia/CountyCodes"));
         
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
@@ -48,11 +51,15 @@ class GeorgiaCreateSchemaCommand extends Command {
             // $output->writeln($this->voterService->importRole(\json_decode(\file_get_contents("php://stdin"),true))->encode());            
         }
     }
+    public function getSchemaFor($filename) {
+        //return file_get_contents(__DIR__ . "/../sql/georgia/". $filename .".sql");  
+        return \file_get_contents("sql/". $filename .".sql");
+    }
     public function countyCodes() {
-        return file_get_contents(__DIR__ . "/../schema/georgia/CountyCodes.sql");
+        return file_get_contents(__DIR__ . "/../sql/georgia/CountyCodes.sql");
     } 
     public function voters() {
-        return file_get_contents(__DIR__ . "/../schema/georgia/Voters.sql");
+        return file_get_contents(__DIR__ . "/../sql/georgia/Voters.sql");
     } 
     
 }
