@@ -17,9 +17,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\Console\Application; 
 use GCG\votertools\GeorgiaCreateSchemaCommand;
 use GCG\votertools\FloridaCreateSchemaCommand;
+use GCG\votertools\FloridaUpdateCiviCRMCommand;
 
 $app = new Application();
 $app->add(new GeorgiaCreateSchemaCommand());
 $app->add(new FloridaCreateSchemaCommand());
+$app->add(new FloridaUpdateCiviCRMCommand());
 $app->run();
 ?>
