@@ -2,7 +2,8 @@
     "chmod": "0755",
     "directories": [
         "src",
-        "app"
+        "app",
+        "sql"
     ],
     "files": [
         "LICENSE"
