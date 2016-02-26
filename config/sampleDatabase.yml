@@ -1,0 +1,10 @@
+## YAML Template.
+---
+gcgDatabase:
+    gpfl:
+        database_type: mysql
+        database_name: gpfl2
+        server: localhost
+        username: root
+        password: 
+        port: 3306

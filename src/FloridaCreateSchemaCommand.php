@@ -27,16 +27,19 @@ class FloridaCreateSchemaCommand extends Command {
     protected function configure() {
         $this->setName("florida:schema")
             ->setDescription("Creates Schema for Florida Voter Data.")
-            ->addArgument('fileName',InputArgument::OPTIONAL,'What is the roles filename?')
-            ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
-            ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
-            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
+            ->addArgument('dbname',InputArgument::REQUIRED,'What is the database connection name?')
+            ->addOption('config',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
             ->setHelp("Usage: <info>php console.php import:roles <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
-        // $output->writeln($this->countyCodes());
-        // $output->writeln($this->getSchemaFor("georgia/CountyCodes"));
-        // $output->writeln($this->getSchemaFor("georgia/Voters"));
-        $output->writeln($this->voterService->getSQLFor("florida/CountyCodes"));
+        $this->voterService->setConnectionName($input->getArgument('dbname'));
+        if($input->getOption('config')) {
+            $this->voterService->setConfigFolder($input->getOption('config'));
+        } else {
+            $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
+        }
+//        $output->writeln($this->voterService->getSQLFor("florida/CountyCodes"));
+//        $output->writeln($this->voterService->getSQLFor("florida/Voters"));
+        $this->voterService->createSchema('florida');
     }
 }

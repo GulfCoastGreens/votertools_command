@@ -30,6 +30,16 @@ class VoterService extends \GCG\Core\Connection {
     public function getSQLFor($filename) {
         return \file_get_contents("sql/". $filename .".sql");
     }
+    public function createSchema($state) {
+        foreach (['CountyCodes','CountyCodesInserts','Voters'] as $importFile) {
+            $stmt = $this->getConnection($this->connectionName)->pdo->prepare($this->getSQLFor($state."/".$importFile));
+            if ($stmt->execute()) {
+                echo "Success! Executed $importFile \n";
+            } else {
+                echo "Failed executing $importFile \n";
+            }
+        }
+    }
     public function georgiaCreateSchema() {
         $stmt = $this->getConnection($this->connectionName)->pdo->prepare($this->getSQLFor("georgia/CountyCodes"));
         if ($stmt->execute()) {
