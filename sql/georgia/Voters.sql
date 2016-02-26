@@ -1,4 +1,4 @@
-CREATE TABLE `Voters` (
+CREATE TABLE IF NOT EXISTS `Voters` (
   `CountyCode` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
   `RegistrationNbr` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
   `VoterStatus` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
