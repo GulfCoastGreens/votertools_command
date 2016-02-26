@@ -27,39 +27,18 @@ class GeorgiaCreateSchemaCommand extends Command {
     protected function configure() {
         $this->setName("georgia:schema")
             ->setDescription("Creates Schema for Georgia Voter Data.")
-            ->addArgument('fileName',InputArgument::OPTIONAL,'What is the roles filename?')
-            ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
-            ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
-            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
+            ->addArgument('dbname',InputArgument::REQUIRED,'What is the database connection name?')
+            ->addOption('config',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
             ->setHelp("Usage: <info>php console.php import:roles <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
-        // $output->writeln($this->countyCodes());
-        // $output->writeln($this->getSchemaFor("georgia/CountyCodes"));
-        // $output->writeln($this->getSchemaFor("georgia/Voters"));
-        $output->writeln($this->voterService->getSQLFor("georgia/CountyCodes"));
-        
-        if($filePath = $input->getArgument('fileName')) {
-            if (\file_exists($filePath)) {
-                $output->writeln("Importing roles from ".$input->getOption('type').": Started at ".date("F j, Y, g:i a"));
-                // $output->writeln($this->voterService->parseFileByType($filePath,'roles',$input->getOption('type')));
-                $output->writeln("Importing roles from ".$input->getOption('type').": Ended at ".date("F j, Y, g:i a"));
-            } else {
-                $output->writeln("ERROR: File does not exist!");
-            }
+        $this->voterService->setConnectionName($input->getArgument('dbname'));
+        if($input->getOption('config')) {
+            $this->voterService->setConfigFolder($input->getOption('config'));
         } else {
-            // $output->writeln($this->voterService->importRole(\json_decode(\file_get_contents("php://stdin"),true))->encode());            
+            $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
         }
+        $output->writeln($this->voterService->createSchema('georgia'));
     }
-    public function getSchemaFor($filename) {
-        //return file_get_contents(__DIR__ . "/../sql/georgia/". $filename .".sql");  
-        return \file_get_contents("sql/". $filename .".sql");
-    }
-    public function countyCodes() {
-        return file_get_contents(__DIR__ . "/../sql/georgia/CountyCodes.sql");
-    } 
-    public function voters() {
-        return file_get_contents(__DIR__ . "/../sql/georgia/Voters.sql");
-    } 
     
 }
