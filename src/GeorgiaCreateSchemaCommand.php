@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace gcg\votertools;
+namespace GCG\votertools;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
