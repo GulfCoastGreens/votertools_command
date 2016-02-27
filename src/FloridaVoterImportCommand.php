@@ -31,6 +31,7 @@ class FloridaVoterImportCommand extends Command {
             ->addArgument('dbname',InputArgument::REQUIRED,'What is the database connection name?')
             ->addArgument('fileName',InputArgument::REQUIRED,'What is the zip file name?')
             ->addOption('config',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
+            ->addOption('tmp',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
             ->setHelp("Usage: <info>php console.php florida:voterimport <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -41,7 +42,12 @@ class FloridaVoterImportCommand extends Command {
             $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
         }
         $filePath = $input->getArgument('fileName');
-        $tempfile = \tempnam(\sys_get_temp_dir(), '');
+        if($input->getOption('tmp')) {
+            $tempfile = \tempnam($input->getOption('tmp'), '');
+        } else {
+            $tempfile = \tempnam(\sys_get_temp_dir(), '');
+        }
+        
         $output->writeln("Creating temp file to store unzipped voter file: ".$tempfile);
         $op = \fopen($tempfile, 'a');
 
