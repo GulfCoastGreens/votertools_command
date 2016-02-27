@@ -38,6 +38,6 @@ class FloridaCreateSchemaCommand extends Command {
         } else {
             $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
         }
-        $output->writeln($this->voterService->createSchema('florida'));
+        $output->writeln($this->voterService->createSchema(['CountyCodes','CountyCodesInserts','Voters','Parties','PartiesInserts','Histories'],'florida'));
     }
 }

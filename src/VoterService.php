@@ -15,6 +15,8 @@ namespace GCG\votertools;
  */
 class VoterService extends \GCG\Core\Connection {
     use VoterFormating;
+    use GeorgiaVoters;
+    use FloridaVoters;
     public $dbh;
     
     public $connectionName;
@@ -30,8 +32,8 @@ class VoterService extends \GCG\Core\Connection {
     public function getSQLFor($filename) {
         return \file_get_contents("sql/". $filename .".sql");
     }
-    public function createSchema($state) {
-        foreach (['CountyCodes','CountyCodesInserts','Voters'] as $importFile) {
+    public function createSchema($sqlfiles,$state) {
+        foreach ($sqlfiles as $importFile) {
             $stmt = $this->getConnection($this->connectionName)->pdo->prepare($this->getSQLFor($state."/".$importFile));
             if ($stmt->execute()) {
                 echo "Success! Executed $importFile \n";

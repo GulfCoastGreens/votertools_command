@@ -38,7 +38,7 @@ class GeorgiaCreateSchemaCommand extends Command {
         } else {
             $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
         }
-        $output->writeln($this->voterService->createSchema('georgia'));
+        $output->writeln($this->voterService->createSchema(['CountyCodes','CountyCodesInserts','Voters'],'georgia'));
     }
     
 }
