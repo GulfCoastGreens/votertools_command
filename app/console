@@ -19,10 +19,12 @@ use GCG\votertools\GeorgiaCreateSchemaCommand;
 use GCG\votertools\FloridaCreateSchemaCommand;
 use GCG\votertools\FloridaUpdateCiviCRMCommand;
 use GCG\votertools\FloridaVoterImportCommand;
+use GCG\votertools\FloridaHistoryImportCommand;
 $app = new Application();
 $app->add(new GeorgiaCreateSchemaCommand());
 $app->add(new FloridaCreateSchemaCommand());
 $app->add(new FloridaUpdateCiviCRMCommand());
 $app->add(new FloridaVoterImportCommand());
+$app->add(new FloridaHistoryImportCommand());
 $app->run();
 ?>

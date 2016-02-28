@@ -14,24 +14,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+
 /**
- * Description of FloridaVoterImportCommand
+ * Description of FloridaHistoryImportCommand
  *
  * @author jam
  */
-class FloridaVoterImportCommand extends Command {
+class FloridaHistoryImportCommand extends Command {
     public function __construct() {
         $this->voterService = new \GCG\votertools\VoterService();
         parent::__construct();
     }
     protected function configure() {
-        $this->setName("florida:voterimport")
-            ->setDescription("Imports Florida Voter Data from zip file.")
+        $this->setName("florida:historyimport")
+            ->setDescription("Imports Florida History Data from zip file.")
             ->addArgument('dbname',InputArgument::REQUIRED,'What is the database connection name?')
             ->addArgument('fileName',InputArgument::REQUIRED,'What is the zip file name?')
             ->addOption('config',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
             ->addOption('tmp',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
-            ->setHelp("Usage: <info>php console.php florida:voterimport <env></info>");
+            ->setHelp("Usage: <info>php console.php florida:historyimport <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         $this->voterService->setConnectionName($input->getArgument('dbname'));
@@ -73,10 +74,9 @@ class FloridaVoterImportCommand extends Command {
             fclose($op);
             chmod($tempfile, 0644);
             $output->writeln("Importing ".$tempfile." for ".$voterDate);
-            $this->voterService->loadRawData($voterDate,$tempfile,"florida/VoterLoadImport");
+            $this->voterService->loadRawData($voterDate,$tempfile,"florida/HistoryLoadImport");
             $output->writeln("Cleaned up ".$tempfile);
         }
     }
-
     
 }

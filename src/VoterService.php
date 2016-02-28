@@ -42,6 +42,18 @@ class VoterService extends \GCG\Core\Connection {
             }
         }
     }
+    public function loadRawData($filedate,$filename,$sqlFile) {
+        echo "Using $sqlFile for LOAD DATA import\n";
+        $sql = \str_replace('{$filename}',$filename,\str_replace('{$filedate}', $filedate, $this->getSQLFor($sqlFile)));
+        $stmt = $this->getConnection($this->connectionName)->pdo->prepare($sql,[\PDO::MYSQL_ATTR_LOCAL_INFILE => true]);
+        if ($stmt->execute()) {
+            echo "Success! Executed $sqlFile against $filename \n";
+        } else {
+            print_r($stmt->errorInfo());
+            echo "Failed executing $sqlFile against $filename \n";
+        }        
+        \unlink($filename);                
+    }
 
     
     
