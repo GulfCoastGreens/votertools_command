@@ -41,6 +41,7 @@ class FloridaVoterImportCommand extends Command {
         } else {
             $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
         }
+        $this->voterService->setAttributes([\PDO::MYSQL_ATTR_LOCAL_INFILE => true]);
         $filePath = $input->getArgument('fileName');
         if($input->getOption('tmp')) {
             $tempfile = \tempnam($input->getOption('tmp'), '');
@@ -59,7 +60,7 @@ class FloridaVoterImportCommand extends Command {
                 if(empty($voterDate)) {
                     $info = $zip->statIndex($i);                
                     $voterDate = date("Ymd", $info["mtime"]);
-                    $output->writeln(date("Ymd", $info["mtime"]));
+                    $output->writeln("Import Date: ".date("Ymd", $info["mtime"]));
                 }
                 $output->writeln("Reading Voter File: ".$zip->getNameIndex($i));
                 $fp = $zip->getStream($zip->getNameIndex($i));
