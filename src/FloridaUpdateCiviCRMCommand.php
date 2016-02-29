@@ -28,8 +28,8 @@ class FloridaUpdateCiviCRMCommand extends Command {
         $this->setName("florida:civiupdate")
             ->setDescription("Output SQL updates for CiviCRM Florida Voter Data.")
             ->addArgument('dbname',InputArgument::REQUIRED,'What is the database connection name?')
+            ->addArgument('fileName',InputArgument::REQUIRED,'What is the zip file name?')
             ->addOption('config',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
-            ->addOption('input',null,InputOption::VALUE_REQUIRED,'What is input file?',false)
             ->addOption('voterkey',null,InputOption::VALUE_REQUIRED,'What is key for json voter id?',false)
             ->setHelp("Usage: <info>php console.php florida:civiupdate <env></info>");
     }
@@ -42,12 +42,10 @@ class FloridaUpdateCiviCRMCommand extends Command {
         }
         $voterIds = \array_map(function($obj) use($input) {
             return $obj[$input->getOption('voterkey')];
-        }, \json_decode(\file_get_contents($input->getOption('input')), true));
-        // $result = $this->voterService->buildUpdateSQL($voterIds);
-        // $output->writeln($result);        
+        }, \json_decode(\file_get_contents($input->getArgument('fileName')), true));
         
         
-        
-        $output->writeln($this->voterService->createSchema('florida'));
+        $this->voterService->buildFloridaUpdateSQL($voterIds);
+//        $output->writeln($this->voterService->buildFloridaUpdateSQL($voterIds));
     }
 }

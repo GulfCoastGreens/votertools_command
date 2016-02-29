@@ -3,7 +3,7 @@
 gcgDatabase:
     gpfl:
         database_type: mysql
-        database_name: gpfl2
+        database_name: gpfl
         server: localhost
         username: root
         password: 

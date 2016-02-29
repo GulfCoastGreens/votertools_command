@@ -25,7 +25,16 @@ class VoterService extends \GCG\Core\Connection {
         $this->connectionName = $connectionName;
     }
     public function setConfigFolder($folder) {
-        $this->config = new \Configula\Config($folder); 
+        $this->config = (new \Configula\Config($folder))->getItem('votertools', [
+            'voter' => [ 
+                'florida' => [
+                    "civicrm" => [
+                        'tablename' => 'civicrm_value_fl_voter_id_1',
+                        'voterFieldMap' => []
+                    ]
+                ]
+            ]
+        ]);        
         parent::setConfigFolder($folder);
     }
     
