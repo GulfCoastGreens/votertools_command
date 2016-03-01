@@ -30,7 +30,11 @@ trait FloridaVoters {
         "mailing_address_line_3",
         "mailing_city",        
     ];
-    public function buildFloridaUpdateSQL($voterIds) {
+    public function buildFloridaUpdateSQL($voterIds,$maxlines = 2000) {
+        $rootfilename = "civicrmupdate";
+        $filenumber = 1;
+        $lines = 0;
+        $fp = @fopen($rootfilename.$filenumber.'.sql', 'a'); // open or create the file for writing and append info
         foreach ($voterIds as $id) {
             $updatelines = [];
             $voterregistrationIDfield = \array_flip($this->config['voter']['florida']['civicrm']['voterFieldMap'])[$this->config['voter']['florida']['civicrm']['voterIDfield']];
@@ -94,9 +98,34 @@ trait FloridaVoters {
                 $setfields[] = \implode(" = ", ["`birth_date`",$this->getConnection($this->connectionName)->pdo->quote($voter['birth_date'])]);
                 $updatelines[] = "UPDATE `civicrm_contact` SET " . \implode(", ", $setfields) . " WHERE  `id` IN(SELECT `entity_id` FROM `{$this->config['voter']['florida']['civicrm']['tablename']}` WHERE `{$this->config['voter']['florida']['civicrm']['voterIDfield']}` = ".$this->getConnection($this->connectionName)->pdo->quote($id). " )";
                 
-                echo \implode(";\n", $updatelines).";\n\n";
+                if($lines+4 > $maxlines) {
+                    $lines = 0;
+                    fclose($fp); // close the file
+                    
+                    $zip = new \ZipArchive;        
+                    if($zip->open($rootfilename.$filenumber.'.sql.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+                      exit('cannot create zip');            
+                    }
+                    $zip->addFile($rootfilename.$filenumber.'.sql', $rootfilename.$filenumber.'.sql');
+                    $zip->close();
+                    \unlink($rootfilename.$filenumber.'.sql');
+                    
+                    $filenumber++;
+                    $fp = @fopen($rootfilename.$filenumber.'.sql', 'a'); // open or create the file for writing and append info
+                }
+                // echo \implode(";\n", $updatelines).";\n\n";
+                fputs($fp, \implode(";\n", $updatelines).";\n\n"); // write the data in the opened file
+                $lines += 4;
             }
         }            
+        fclose($fp); // close the file
+        $zip = new \ZipArchive;        
+        if($zip->open($rootfilename.$filenumber.'.sql.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+          exit('cannot create zip');            
+        }
+        $zip->addFile($rootfilename.$filenumber.'.sql', $rootfilename.$filenumber.'.sql');
+        $zip->close();
+        \unlink($rootfilename.$filenumber.'.sql');
     }
     
 }
