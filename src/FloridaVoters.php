@@ -87,6 +87,12 @@ trait FloridaVoters {
                 $updatequery = "UPDATE `civicrm_address` a JOIN `".$this->config['voter']['florida']['civicrm']['tablename']."` AS ea ON ea.entity_id = a.contact_id AND a.`is_primary` = 1 AND a.`location_type_id` = (SELECT `id` FROM `civicrm_location_type` WHERE `name` = 'Home' LIMIT 1) SET " . \implode(", ", $setfields) . " ".$wherequery;
                 
                 $updatelines[] = $updatequery;
+
+                $setfields = [];
+//                $setfields[] = \implode(" = ", [ "`gender_id`", "(SELECT `id` FROM  `civicrm_option_value` WHERE `option_group_id` = (SELECT `id` FROM `civicrm_option_group` WHERE `name` LIKE 'gender') AND `name` LIKE CASE '{$voter['gender']}' WHEN 'M' THEN 'Male' WHEN 'F' THEN 'Female' ELSE 'Unknown' END LIMIT 1)" ]);
+                $setfields[] = \implode(" = ", [ "`gender_id`", "CASE '{$voter['gender']}' WHEN 'M' THEN 2 WHEN 'F' THEN 1 ELSE 4 END" ]);
+                $setfields[] = \implode(" = ", ["`birth_date`",$this->getConnection($this->connectionName)->pdo->quote($voter['birth_date'])]);
+                $updatelines[] = "UPDATE `civicrm_contact` SET " . \implode(", ", $setfields) . " WHERE  `id` IN(SELECT `entity_id` FROM `{$this->config['voter']['florida']['civicrm']['tablename']}` WHERE `{$this->config['voter']['florida']['civicrm']['voterIDfield']}` = ".$this->getConnection($this->connectionName)->pdo->quote($id). " )";
                 
                 echo \implode(";\n", $updatelines).";\n\n";
             }
