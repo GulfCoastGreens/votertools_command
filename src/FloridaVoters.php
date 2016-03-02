@@ -127,5 +127,89 @@ trait FloridaVoters {
         $zip->close();
         \unlink($rootfilename.$filenumber.'.sql');
     }
+    public function buildFloridaMissingVoters($partycode,$voterIds) {
+        $maxlines = 200;
+        $lines = 1;
+        $filenumber = 1;
+        $rootfilename= "civicrmimport_";
+        $fields = [
+            'Last Name',
+            'First Name',
+            'Middle Name',
+            ''
+        ];
+        if($exportDate = $this->getConnection($this->connectionName)->max("Voters", "export_date")) {
+            echo $exportDate." - Latest Voter File\n";
+            $sth = $this->getConnection($this->connectionName)->pdo->prepare('SELECT * FROM Voters WHERE export_date = :exportdate AND party_affiliation = :partycode',[
+                \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false
+            ]);
+            $sth->execute([
+                'exportdate' => $exportDate,
+                'partycode' => $partycode
+            ]);
+            $newvoters =[];
+            $fp = @fopen($rootfilename.$filenumber.'.csv', 'a'); // open or create the file for writing and append info
+            while($voter = $sth->fetch()) {
+                if(!\in_array($voter['voter_id'], $voterIds)) {
+                    // echo "Found new party member {$voter['voter_id']} \n";
+                    $newvoters[] = [ 'voter_id' => $voter['voter_id'] ];
+                    if($lines+1 > $maxlines) {
+                        $lines = 1;
+                        fclose($fp); // close the file
+
+                        $filenumber++;
+                        $fp = @fopen($rootfilename.$filenumber.'.csv', 'a'); // open or create the file for writing and append info
+                    }
+                    $state = 'Florida';
+                    $country = 'UNITED STATES';
+                    $getGender = function($g) {
+                        switch ($g) {
+                            case "F":
+                                return "Female";
+                                break;
+                            case "M":
+                                return "Male";
+                                break;
+                            default:
+                                return "Unknown";
+                                break;
+                        }                        
+                    };
+                    fputcsv($fp, \array_map(function($element) {
+                        // return $this->getConnection($this->connectionName)->pdo->quote($element);
+                        // return '"'."{$element}".'"';
+                        return trim($this->getConnection($this->connectionName)->pdo->quote($element), "\'");
+                    }, [
+                        VoterService::titleCase($voter['name_last']),
+                        VoterService::titleCase($voter['name_first']),
+                        VoterService::titleCase($voter['name_middle']),
+                        VoterService::tidy($voter['residence_address_line_1']),
+                        VoterService::tidy($voter['residence_address_line_2']),
+                        VoterService::tidy($voter['residence_city']),
+                        $state,
+                        \substr($voter['residence_zipcode'],0,5),
+                        \substr($voter['residence_zipcode'],5),
+                        $this->getConnection($this->connectionName)->get("CountyCodes","CountyDescription",[
+                            'CountyCode' => $voter['county_code']
+                        ]),
+                        $country,
+                        $getGender($voter['gender']),
+                        $voter['birth_date'],
+                        join("", [$voter['daytime_area_code'],$voter['daytime_phone_number']]),
+                        $voter['voter_id']
+                    ]), ",", '"', "\\");
+                    $lines++;
+                }
+            }
+        
+            fclose($fp); // close the file   
+            $fp = fopen($rootfilename.'.json', 'w');
+            fwrite($fp, json_encode($newvoters, JSON_PRETTY_PRINT));
+            fclose($fp);
+        } else {
+            echo 'NO DATA FOUND FOR VOTER REGISTRATION\n';
+        }
+    }
+
     
 }
