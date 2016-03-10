@@ -75,6 +75,9 @@ class FloridaVoterImportCommand extends Command {
             $output->writeln("Importing ".$tempfile." for ".$voterDate);
             $this->voterService->loadRawData($voterDate,$tempfile,"florida/VoterLoadImport");
             $output->writeln("Cleaned up ".$tempfile);
+            $output->writeln("Starting append of Party Affiliation to PartyHistories table ");
+            $this->voterService->appendFloridaPartyHistories();
+            $output->writeln("Completed append of Party Affiliation to PartyHistories table ");
         }
     }
 

@@ -1,0 +1,1 @@
+INSERT IGNORE INTO PartyHistories SELECT county_code,voter_id,party_affiliation,export_date FROM Voters;

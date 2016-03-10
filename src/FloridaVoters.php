@@ -30,6 +30,14 @@ trait FloridaVoters {
         "mailing_address_line_3",
         "mailing_city",        
     ];
+    public function appendFloridaPartyHistories() {
+        $stmt = $this->getConnection($this->connectionName)->pdo->prepare($this->getSQLFor("florida/PartyHistoriesAppend"));
+        if ($stmt->execute()) {
+            echo "Success! Executed $importFile \n";
+        } else {
+            echo "Failed executing $importFile \n";
+        }
+    }
     public function buildFloridaUpdateSQL($voterIds,$maxlines = 2000) {
         $rootfilename = "civicrmupdate";
         $filenumber = 1;
