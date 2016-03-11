@@ -38,6 +38,63 @@ trait FloridaVoters {
             echo "Failed executing $importFile \n";
         }
     }
+    public function buildFloridaHistoryUpdateSQL($voterIds,$maxlines = 8000) {
+        $rootfilename = "civicrmhistoryupdate";
+        $filenumber = 1;
+        $lines = 0;
+        $fp = @fopen($rootfilename.$filenumber.'.sql', 'a'); // open or create the file for writing and append info
+        foreach ($voterIds as $id) {
+            $updatelines = [];
+            if($histories = $this->getConnection($this->connectionName)->select("Histories",\array_keys($this->config['voter']['florida']['civicrm']['historyFieldMap']), [
+                "`voter_id`" => $id
+            ])) {
+                foreach ($histories as $history) {
+                    $setvalues = [];
+                    $setfields = ['entity_id'];
+                    $wherefields = [];
+                    $insertsql = "INSERT INTO `".$this->config['voter']['florida']['civicrm']['historytablename']."` ";
+                    foreach ($this->config['voter']['florida']['civicrm']['historyFieldMap'] as $key => $val) {
+                        $setfields[] = "`{$val}`";
+                        $setvalues[] = $this->getConnection($this->connectionName)->pdo->quote($history[$key]);
+
+                        $wherefields[] = \implode(" = ", ["`{$val}`",$this->getConnection($this->connectionName)->pdo->quote($history[$key])]);                                    
+                    }
+                    $insertsql .= "(".\implode(", ", $setfields).") ";
+                    $selectsql = "SELECT `entity_id`,".\implode(", ",$setvalues)." FROM `{$this->config['voter']['florida']['civicrm']['tablename']}` v WHERE `{$this->config['voter']['florida']['civicrm']['voterIDfield']}` = ".$this->getConnection($this->connectionName)->pdo->quote($id);
+                    $selectsql .= " AND (SELECT COUNT(*) FROM `".$this->config['voter']['florida']['civicrm']['historytablename']."` h WHERE  h.`entity_id` = v.`entity_id` AND ".\implode(" AND ",$wherefields).") < 1";
+                    // $selectsql = "SELECT ".\implode(", ", $setvalues). " FROM DUAL WHERE (SELECT COUNT(*) FROM `".$this->config['voter']['florida']['civicrm']['historytablename']."` WHERE   ".\implode(", ",$wherefields).") < 1";
+                    $updatelines[] = $insertsql . $selectsql;
+                }
+                if($lines+(count($updatelines)+1) > $maxlines) {
+                    $lines = 0;
+                    fclose($fp); // close the file
+
+                    $zip = new \ZipArchive;        
+                    if($zip->open($rootfilename.$filenumber.'.sql.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+                      exit('cannot create zip');            
+                    }
+                    $zip->addFile($rootfilename.$filenumber.'.sql', $rootfilename.$filenumber.'.sql');
+                    $zip->close();
+                    \unlink($rootfilename.$filenumber.'.sql');
+
+                    $filenumber++;
+                    $fp = @fopen($rootfilename.$filenumber.'.sql', 'a'); // open or create the file for writing and append info
+                }
+                $lines += (count($updatelines)+1);
+                fputs($fp, \implode(";\n", $updatelines).";\n\n"); // write the data in the opened file
+            } else {
+                var_dump($this->getConnection($this->connectionName)->error());
+            }
+        }
+        fclose($fp); // close the file
+        $zip = new \ZipArchive;        
+        if($zip->open($rootfilename.$filenumber.'.sql.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+          exit('cannot create zip');            
+        }
+        $zip->addFile($rootfilename.$filenumber.'.sql', $rootfilename.$filenumber.'.sql');
+        $zip->close();
+        \unlink($rootfilename.$filenumber.'.sql');                
+    }
     public function buildFloridaUpdateSQL($voterIds,$maxlines = 2000) {
         $rootfilename = "civicrmupdate";
         $filenumber = 1;
@@ -101,7 +158,6 @@ trait FloridaVoters {
                 $updatelines[] = $updatequery;
 
                 $setfields = [];
-//                $setfields[] = \implode(" = ", [ "`gender_id`", "(SELECT `id` FROM  `civicrm_option_value` WHERE `option_group_id` = (SELECT `id` FROM `civicrm_option_group` WHERE `name` LIKE 'gender') AND `name` LIKE CASE '{$voter['gender']}' WHEN 'M' THEN 'Male' WHEN 'F' THEN 'Female' ELSE 'Unknown' END LIMIT 1)" ]);
                 $setfields[] = \implode(" = ", [ "`gender_id`", "CASE '{$voter['gender']}' WHEN 'M' THEN 2 WHEN 'F' THEN 1 ELSE 4 END" ]);
                 $setfields[] = \implode(" = ", ["`birth_date`",$this->getConnection($this->connectionName)->pdo->quote($voter['birth_date'])]);
                 $updatelines[] = "UPDATE `civicrm_contact` SET " . \implode(", ", $setfields) . " WHERE  `id` IN(SELECT `entity_id` FROM `{$this->config['voter']['florida']['civicrm']['tablename']}` WHERE `{$this->config['voter']['florida']['civicrm']['voterIDfield']}` = ".$this->getConnection($this->connectionName)->pdo->quote($id). " )";
