@@ -46,6 +46,6 @@ class FloridaUpdateCiviCRMCommand extends Command {
         
         
         $this->voterService->buildFloridaUpdateSQL($voterIds);
-//        $output->writeln($this->voterService->buildFloridaUpdateSQL($voterIds));
+        $this->voterService->buildFloridaHistoryUpdateSQL($voterIds);
     }
 }

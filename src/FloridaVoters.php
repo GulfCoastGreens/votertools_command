@@ -83,7 +83,7 @@ trait FloridaVoters {
                 $lines += (count($updatelines)+1);
                 fputs($fp, \implode(";\n", $updatelines).";\n\n"); // write the data in the opened file
             } else {
-                var_dump($this->getConnection($this->connectionName)->error());
+                // var_dump($this->getConnection($this->connectionName)->error());
             }
         }
         fclose($fp); // close the file
