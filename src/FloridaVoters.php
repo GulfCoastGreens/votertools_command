@@ -38,7 +38,7 @@ trait FloridaVoters {
             echo "Failed executing $importFile \n";
         }
     }
-    public function buildFloridaHistoryUpdateSQL($voterIds,$maxlines = 8000) {
+    public function buildFloridaHistoryUpdateSQL($voterIds,$maxlines = 12000) {
         $rootfilename = "civicrmhistoryupdate";
         $filenumber = 1;
         $lines = 0;
