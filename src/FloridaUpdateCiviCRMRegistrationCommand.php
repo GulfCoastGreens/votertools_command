@@ -14,26 +14,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-
 /**
- * Description of FloridaCreateMissingPartyCiviCRMContactsImport
+ * Description of FloridaUpdateCiviCRMRegistrationCommand
  *
  * @author jam
  */
-class FloridaCreateMissingPartyCiviCRMContactsImport extends Command {
+class FloridaUpdateCiviCRMRegistrationCommand extends Command {
     public function __construct() {
         $this->voterService = new \GCG\votertools\VoterService();
         parent::__construct();
     }
     protected function configure() {
-        $this->setName("florida:missingpartycontacts")
-            ->setDescription("Imports Florida Voter Data from zip file.")
+        $this->setName("florida:civiupdateparty")
+            ->setDescription("Output SQL updates for CiviCRM Florida Party Data.")
             ->addArgument('dbname',InputArgument::REQUIRED,'What is the database connection name?')
             ->addArgument('fileName',InputArgument::REQUIRED,'What is the json file name?')
             ->addOption('config',null,InputOption::VALUE_REQUIRED,'What is config folder?',false)
             ->addOption('voterkey',null,InputOption::VALUE_REQUIRED,'What is key for json voter id?',false)
-            ->addOption('partycode',null,InputOption::VALUE_REQUIRED,'What is voter party code?',false)
-            ->setHelp("Usage: <info>php console.php florida:missingpartycontacts <env></info>");
+            ->setHelp("Usage: <info>php console.php florida:civiupdateparty <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         $this->voterService->setConnectionName($input->getArgument('dbname'));
@@ -42,13 +40,12 @@ class FloridaCreateMissingPartyCiviCRMContactsImport extends Command {
         } else {
             $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
         }
-        
         $voterIds = \array_map(function($obj) use($input) {
             return $obj[$input->getOption('voterkey')];
         }, \json_decode(\file_get_contents($input->getArgument('fileName')), true));
         
         
-        $this->voterService->buildFloridaMissingVoters($input->getOption('partycode'),$voterIds);
-        
+        $this->voterService->buildFloridaPartyUpdateSQL($voterIds);
     }
+
 }

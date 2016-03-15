@@ -22,6 +22,7 @@ use GCG\votertools\FloridaVoterImportCommand;
 use GCG\votertools\FloridaHistoryImportCommand;
 use GCG\votertools\FloridaCreateMissingPartyCiviCRMContactsImport;
 use GCG\votertools\FloridaUpdateCiviCRMCHistoryCommand;
+use GCG\votertools\FloridaUpdateCiviCRMRegistrationCommand;
 $app = new Application();
 $app->add(new GeorgiaCreateSchemaCommand());
 $app->add(new FloridaCreateSchemaCommand());
@@ -30,5 +31,6 @@ $app->add(new FloridaVoterImportCommand());
 $app->add(new FloridaHistoryImportCommand());
 $app->add(new FloridaCreateMissingPartyCiviCRMContactsImport());
 $app->add(new FloridaUpdateCiviCRMCHistoryCommand());
+$app->add(new FloridaUpdateCiviCRMRegistrationCommand());
 $app->run();
 ?>
