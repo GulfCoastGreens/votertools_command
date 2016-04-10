@@ -1,5 +1,5 @@
 LOAD DATA LOCAL INFILE '{$filename}'
-    IGNORE INTO TABLE `Histories`
+    REPLACE INTO TABLE `Histories`
     FIELDS TERMINATED BY '\t'
     LINES TERMINATED BY '\n'
     (`county_code`,
