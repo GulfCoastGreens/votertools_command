@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `Voters` (
-  `county_code` varchar(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `voter_id` bigint(18) unsigned NOT NULL,
+  `county_code` varchar(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name_last` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name_suffix` varchar(5) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name_first` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -37,7 +37,9 @@ CREATE TABLE IF NOT EXISTS `Voters` (
   `daytime_phone_number` varchar(7) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `daytime_phone_extension` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `export_date` date NOT NULL,
-  PRIMARY KEY (`voter_id`,`county_code`,`export_date`),
+  PRIMARY KEY (`voter_id`),
+  KEY `voter_id_index` (`voter_id`),
+  KEY `county_code_index` (`county_code`),
   KEY `name_last_index` (`name_last`),
   KEY `name_first_index` (`name_first`),
   KEY `name_middle_index` (`name_middle`),
@@ -45,6 +47,5 @@ CREATE TABLE IF NOT EXISTS `Voters` (
   KEY `residence_zipcode_index` (`residence_zipcode`),
   KEY `mailing_city_index` (`mailing_city`),
   KEY `mailing_zipcode_index` (`mailing_zipcode`),
-  KEY `voter_id_index` (`voter_id`),
-  KEY `county_code_index` (`county_code`)
+  KEY `export_date_index` (`export_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
