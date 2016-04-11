@@ -33,9 +33,9 @@ trait FloridaVoters {
     public function appendFloridaPartyHistories() {
         $stmt = $this->getConnection($this->connectionName)->pdo->prepare($this->getSQLFor("florida/PartyHistoriesAppend"));
         if ($stmt->execute()) {
-            echo "Success! Executed $importFile \n";
+            echo "Success! Executed florida/PartyHistoriesAppend \n";
         } else {
-            echo "Failed executing $importFile \n";
+            echo "Failed executing florida/PartyHistoriesAppend \n";
         }
     }
     public function buildFloridaPartyUpdateSQL($voterIds,$maxlines = 12000) {
