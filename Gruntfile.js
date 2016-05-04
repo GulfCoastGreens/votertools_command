@@ -48,6 +48,15 @@ module.exports = function (grunt) {
             src: ['deploy/*.rpm','deploy/*.deb']
         }
     },
+    chmod: {
+        options: {
+            mode: '755'
+        },
+        pharbits: {
+            // Target-specific file/dir lists and/or options go here.
+            src: ['bin/votertools']
+        }
+    },    
     shell: {
         options: {
             stdout: true,
@@ -84,6 +93,7 @@ module.exports = function (grunt) {
       "shell:buildcmd",
       "copy:pharrename",
       "clean:pharrename",
+      "chmod:pharbits",
       "clean:deploy",
       "shell:fpmrpm"
   ]);
