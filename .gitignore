@@ -4,5 +4,5 @@
 nbproject/
 /.vagrant/
 /node_modules/
-build/*.rpm
-build/*.deb
+deploy/*.rpm
+deploy/*.deb
