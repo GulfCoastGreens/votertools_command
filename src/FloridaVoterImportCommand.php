@@ -38,7 +38,7 @@ class FloridaVoterImportCommand extends Command {
         if($input->getOption('config')) {
             $this->voterService->setConfigFolder($input->getOption('config'));
         } else {
-            $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
+            $this->voterService->setConfigFolder('/usr/local/etc/votertools');
         }
         $this->voterService->setAttributes([\PDO::MYSQL_ATTR_LOCAL_INFILE => true]);
         $filePath = $input->getArgument('fileName');

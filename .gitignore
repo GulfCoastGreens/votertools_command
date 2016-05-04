@@ -3,3 +3,6 @@
 /bin/
 nbproject/
 /.vagrant/
+/node_modules/
+build/*.rpm
+build/*.deb

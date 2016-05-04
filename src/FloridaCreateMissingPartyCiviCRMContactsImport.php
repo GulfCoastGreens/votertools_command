@@ -40,7 +40,7 @@ class FloridaCreateMissingPartyCiviCRMContactsImport extends Command {
         if($input->getOption('config')) {
             $this->voterService->setConfigFolder($input->getOption('config'));
         } else {
-            $this->voterService->setConfigFolder('/usr/local/etc/gcg/default');
+            $this->voterService->setConfigFolder('/usr/local/etc/votertools');
         }
         
         $voterIds = \array_map(function($obj) use($input) {
