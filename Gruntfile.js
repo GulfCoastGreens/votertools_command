@@ -98,6 +98,7 @@ module.exports = function (grunt) {
       "clean:pharrename",
       "chmod:pharbits",
       "clean:deploy",
+      "shell:mkdeploy",
       "shell:fpmrpm"
   ]);
   
