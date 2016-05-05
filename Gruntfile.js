@@ -66,6 +66,9 @@ module.exports = function (grunt) {
         buildcmd: {
             command: './build.sh'
         },
+        mkdeploy: {
+            command: 'mkdir -p deploy'
+        },
         fpmrpm: {
             "command": [
                 [ 
@@ -83,7 +86,7 @@ module.exports = function (grunt) {
                   '"php-xml"',
                   '"php-cli"'
                 ].join(' -d '), 
-                '--after-install deploy/setup/setupconfig.sh -p deploy bin'
+                '--after-install app/setupconfig.sh -p deploy bin'
             ].join(' ')
         }
     }

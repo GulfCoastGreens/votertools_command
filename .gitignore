@@ -6,3 +6,5 @@ nbproject/
 /node_modules/
 deploy/*.rpm
 deploy/*.deb
+/npm-debug.log
+/deploy/
