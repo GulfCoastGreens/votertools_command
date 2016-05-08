@@ -88,6 +88,26 @@ module.exports = function (grunt) {
                 ].join(' -d '), 
                 '--config-files /usr/local/etc/votertools/votertools.yml -p deploy ./bin/votertools.phar=/usr/local/bin/votertools ./config/votertools.yml=/usr/local/etc/votertools/votertools.yml'
             ].join(' ')
+        },
+        fpmdeb: {
+            "command": [
+                [ 
+                  '/usr/local/bin/fpm -s dir -t deb -n \'<%= appEnv.name %>\' -v <%= appEnv.version %> ',
+                  '"php"', 
+                  '"php-common"', 
+                  '"php-mysqlnd"', 
+                  '"php-pdo"', 
+                  '"php-devel"', 
+                  '"php-pear"', 
+                  '"php-gd"',
+                  '"php-mcrypt"',
+                  '"php-xml"',
+                  '"php-mbstring"',
+                  '"php-xml"',
+                  '"php-cli"'
+                ].join(' -d '), 
+                '--config-files /usr/local/etc/votertools/votertools.yml -p deploy ./bin/votertools.phar=/usr/local/bin/votertools ./config/votertools.yml=/usr/local/etc/votertools/votertools.yml'
+            ].join(' ')
         }
     }
 });
@@ -100,6 +120,7 @@ module.exports = function (grunt) {
       "clean:deploy",
       "shell:mkdeploy",
       "shell:fpmrpm"
+      // "shell:fpmdeb"
   ]);
   
 };
