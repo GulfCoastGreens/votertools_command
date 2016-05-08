@@ -39,7 +39,7 @@ class VoterService extends \GCG\Core\Connection {
     }
     
     public function getSQLFor($filename) {
-        return @\file_get_contents("sql/". $filename .".sql");
+        return \file_get_contents(\dirname(__FILE__)."/../sql/". $filename .".sql");
     }
     public function createSchema($sqlfiles,$state) {
         foreach ($sqlfiles as $importFile) {

@@ -54,7 +54,7 @@ module.exports = function (grunt) {
         },
         pharbits: {
             // Target-specific file/dir lists and/or options go here.
-            src: ['bin/votertools']
+            src: ['bin/votertools.phar']
         }
     },    
     shell: {
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
         fpmrpm: {
             "command": [
                 [ 
-                  '/usr/local/bin/fpm -s dir -t rpm -n \'<%= appEnv.name %>\' -v <%= appEnv.version %> --prefix /usr/local',
+                  '/usr/local/bin/fpm -s dir -t rpm -n \'<%= appEnv.name %>\' -v <%= appEnv.version %> ',
                   '"php"', 
                   '"php-common"', 
                   '"php-mysqlnd"', 
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                   '"php-xml"',
                   '"php-cli"'
                 ].join(' -d '), 
-                '--after-install app/setupconfig.sh -p deploy bin'
+                '--config-files /usr/local/etc/votertools/votertools.yml -p deploy ./bin/votertools.phar=/usr/local/bin/votertools ./config/votertools.yml=/usr/local/etc/votertools/votertools.yml'
             ].join(' ')
         }
     }
@@ -94,8 +94,8 @@ module.exports = function (grunt) {
   
   grunt.registerTask('build', [
       "shell:buildcmd",
-      "copy:pharrename",
-      "clean:pharrename",
+      // "copy:pharrename",
+      // "clean:pharrename",
       "chmod:pharbits",
       "clean:deploy",
       "shell:mkdeploy",

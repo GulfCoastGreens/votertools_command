@@ -1,16 +1,16 @@
-#! /bin/sh
-
-if [ ! -d /usr/local/etc/votertools ]; then
-    mkdir -p /usr/local/etc/votertools
-fi
-if [ ! -f /usr/local/etc/votertools/votertools.yml ]; then
-    echo "File not found!"
-    CONFIGFILE="/usr/local/etc/votertools/votertools.yml"
-    /bin/cat <<EOM >$CONFIGFILE
+## YAML Template.
+---
 gcgDatabase:
     gpfl:
         database_type: mysql
         database_name: gpfl
+        server: localhost
+        username: root
+        password: 
+        port: 3306
+    gpga:
+        database_type: mysql
+        database_name: gpga
         server: localhost
         username: root
         password: 
@@ -72,5 +72,3 @@ votertools:
                     daytime_phone_extension: daytime_phone_extension_38
                     export_date: current_export_date_39
         georgia: 
-EOM
-fi
