@@ -24,26 +24,7 @@ module.exports = function (grunt) {
     // Project settings
     appEnv: appConfig,
     
-    copy: {
-        pharrename: {
-            files: [{
-                expand: true,
-                dot: true,
-                cwd: 'bin',
-                dest: 'bin/',
-                src: [
-                    'votertools.phar'
-                ],
-                rename: function(dest, src) {
-                    return dest + src.replace('.phar','');
-                }
-              }]
-        }
-    },
     clean: {
-        pharrename: {
-            src: ['bin/votertools.phar']
-        },
         deploy: {
             src: ['deploy/*.rpm','deploy/*.deb']
         }
@@ -114,8 +95,6 @@ module.exports = function (grunt) {
   
   grunt.registerTask('build', [
       "shell:buildcmd",
-      // "copy:pharrename",
-      // "clean:pharrename",
       "chmod:pharbits",
       "clean:deploy",
       "shell:mkdeploy",
