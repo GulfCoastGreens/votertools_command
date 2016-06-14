@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `Voters` (
   `daytime_area_code` varchar(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `daytime_phone_number` varchar(7) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `daytime_phone_extension` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `email_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `export_date` date NOT NULL,
   PRIMARY KEY (`voter_id`),
   KEY `voter_id_index` (`voter_id`),
@@ -48,4 +49,5 @@ CREATE TABLE IF NOT EXISTS `Voters` (
   KEY `mailing_city_index` (`mailing_city`),
   KEY `mailing_zipcode_index` (`mailing_zipcode`),
   KEY `export_date_index` (`export_date`)
+  KEY `email_address_index` (`email_address`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
