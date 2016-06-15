@@ -48,6 +48,6 @@ CREATE TABLE IF NOT EXISTS `Voters` (
   KEY `residence_zipcode_index` (`residence_zipcode`),
   KEY `mailing_city_index` (`mailing_city`),
   KEY `mailing_zipcode_index` (`mailing_zipcode`),
-  KEY `export_date_index` (`export_date`)
-  KEY `email_address_index` (`email_address`) USING BTREE
+  KEY `export_date_index` (`export_date`),
+  KEY `email_address_index` (`email_address`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
