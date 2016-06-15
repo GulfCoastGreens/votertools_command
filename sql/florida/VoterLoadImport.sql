@@ -38,7 +38,8 @@ LOAD DATA LOCAL INFILE '{$filename}'
   `school_board_district`,
   `daytime_area_code`,
   `daytime_phone_number`,
-  `daytime_phone_extension`)
+  `daytime_phone_extension`,
+  `email_address`)
     SET `export_date` = STR_TO_DATE('{$filedate}','%Y%m%d'),
     `birth_date` = STR_TO_DATE(@Birth_Date,'%m/%d/%Y'),
     `registration_date` = STR_TO_DATE(@Registration_Date,'%m/%d/%Y');
