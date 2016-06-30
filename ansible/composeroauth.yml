@@ -13,3 +13,11 @@
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   args: 
     creates: /usr/local/bin/composer
+    
+- name: Setup oauth key for composer
+  composer:
+    command: config
+    working_dir: "{{ composer_working_directory }}"
+    arguments: "--global github-oauth.github.com {{ composer_github_oauth }}"
+  become: yes
+  become_user: "{{ composer_user }}}"
