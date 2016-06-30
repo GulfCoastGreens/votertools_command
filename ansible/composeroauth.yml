@@ -1,0 +1,14 @@
+---
+- name: Install composer dependencies
+  dnf:
+    name: "{ item }"
+    state: present
+  when: inventory_hostname == "fedora"
+  with_items:
+      - curl
+      - libcurl
+      
+- name: Install composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  args: 
+    creates: /usr/local/bin/composer

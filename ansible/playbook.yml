@@ -1,0 +1,17 @@
+---
+- hosts: fedora
+  gather_facts: false
+  remote_user: root
+  tasks:
+    - name: install packages for ansible support
+      raw: dnf -y -e0 -d0 install python python-dnf  
+      when: inventory_hostname == "fedora"
+    - name: gather facts
+      setup: 
+    - name: upgrade all packages
+      dnf: 
+        name: "*" 
+        state: latest
+      when: inventory_hostname == "fedora"
+    - name: Add composer
+      include: composeroauth.yml
