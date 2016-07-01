@@ -1,9 +1,19 @@
+require 'json'
+
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 ENV['ANSIBLE_ROLES_PATH'] = './ansible/roles'
 boxes = [
   { :name => :fedora,     :box => 'fedora/23-cloud-base',    :vmname => 'fedoravotertoolsvm',   :autostart => true, :role => 'web_dev',     :ip => '192.168.33.1', :ssh_port => 2201, :http_fwd => 9980, :cpus =>4, :shares => true },
   { :name => :debian,     :box => 'deb/jessie-amd64',    :vmname => 'debianvotertoolsvm',   :autostart => false,    :role => 'data_dev',         :ip => '192.168.33.2', :ssh_port => 2202, :mysql_fwd => 9936, :cpus =>4 }
 ]
+# Pull in the github-oauth key from logged in user
+begin
+  githuboauth = JSON.parse(%x( /usr/local/bin/composer global config github-oauth ))["github.com"]  
+  # puts githuboauth
+rescue JSON::ParserError => e  
+  githuboauth = ''
+  puts 'GitHub Oauth not found!!!'
+end 
 
 Vagrant.configure(2) do |config|
 
@@ -31,6 +41,11 @@ Vagrant.configure(2) do |config|
         ansible.verbose = "vvv"
         ansible.groups = {
           "votertools" => ["fedoravotertoolsvm","debianvotertoolsvm"]
+        }
+        puts githuboauth
+        ansible.extra_vars = {
+          remote_user: "vagrant",
+          composer_github_oauth: githuboauth
         }
       end
 

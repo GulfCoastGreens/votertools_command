@@ -13,11 +13,23 @@
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   args: 
     creates: /usr/local/bin/composer
-    
+
 - name: Setup oauth key for composer
   composer:
     command: config
-    working_dir: "{{ composer_working_directory }}"
+    working_dir: "/vagrant"
     arguments: "--global github-oauth.github.com {{ composer_github_oauth }}"
-  become: yes
-  become_user: "{{ composer_user }}}"
+
+- name: Setup composer config on vagrant user
+  command: "{{ item }}"
+  with_items: 
+    - "rm -Rf ~{{ composer_user }}/.composer"
+    - "cp -r /root/.composer ~{{ composer_user }}"
+
+- name: Fix composer config ownership
+  file:
+    dest: "~{{ composer_user }}/.composer"
+    owner: "{{ composer_user }}"
+    group: "{{ composer_user }}"
+    recurse: yes
+    

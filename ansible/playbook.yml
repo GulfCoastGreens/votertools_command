@@ -13,5 +13,11 @@
         name: "*" 
         state: latest
       when: inventory_hostname == "fedora"
+    - name: Debug vars
+      debug: var=remote_user 
     - name: Add composer
       include: composeroauth.yml
+      vars:
+        composer_user: "{{ remote_user }}"
+        composer_working_directory: "/home/{{ remote_user }}"
+        
