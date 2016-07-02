@@ -9,7 +9,7 @@ boxes = [
 # Pull in the github-oauth key from logged in user
 begin
   githuboauth = JSON.parse(%x( /usr/local/bin/composer global config github-oauth ))["github.com"]  
-  # puts githuboauth
+# puts githuboauth
 rescue JSON::ParserError => e  
   githuboauth = ''
   puts 'GitHub Oauth not found!!!'
@@ -38,7 +38,7 @@ Vagrant.configure(2) do |config|
       config.vm.provision :ansible do |ansible|
         ansible.playbook = "ansible/playbook.yml"
         ansible.sudo = true
-        ansible.verbose = "vvv"
+        # ansible.verbose = "vvv"
         ansible.groups = {
           "votertools" => ["fedoravotertoolsvm","debianvotertoolsvm"]
         }

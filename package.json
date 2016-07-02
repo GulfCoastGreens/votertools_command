@@ -17,9 +17,5 @@
   },
   "engines": {
     "node": ">=0.8.15"
-  },
-  "scripts": {
-    "postinstall": "node_modules/grunt-cli/bin/grunt build",
-    "preinstall": "npm cache clean && npm prune"
   }
 }

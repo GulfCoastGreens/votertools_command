@@ -1,0 +1,15 @@
+---
+- name: Install RPM required build packages (DNF)
+  dnf: 
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - git
+    - ruby
+    - ruby-devel
+    - rubygems
+    - rpm-build
+  when: inventory_hostname == "fedora"
+
+- name: Ensure the fpm gem installed
+  command: gem install fpm

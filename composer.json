@@ -16,7 +16,7 @@
     "require": {
         "symfony/console": "v2.7.6",
         "gulfcoastgreens/gcg-database": "dev-master",
-        "kherge/box": "2.5.3"
+        "kherge/box": "~2.5"
     },
     "autoload": {
         "psr-4" : {

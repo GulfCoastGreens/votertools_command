@@ -20,4 +20,36 @@
       vars:
         composer_user: "{{ remote_user }}"
         composer_working_directory: "/home/{{ remote_user }}"
-        
+    - name: Add nodejs
+      include: nodejs.yml
+    - name: Configure PHP
+      include: php.yml
+    - name: Configure GEMS fpm
+      include: gems_fpm.yml
+    - name: Update composer dependencies
+      composer:
+        command: "{{ item }}"
+        working_dir: "/{{ remote_user }}"
+      become: yes
+      become_user: "{{ remote_user }}"   
+      with_items:
+        - install
+        - update
+    - name: Build the package
+      shell: "{{ item }}"
+      become: yes
+      become_user: "{{ remote_user }}"   
+      args:
+        chdir: "/{{ remote_user }}"
+      register: result
+      with_items:
+        - "npm cache clean"
+        - "npm prune"
+        - "npm install --ignore-scripts"
+        - "rm -rf bin"
+        - "mkdir -p bin"
+        - "vendor/bin/box build"
+        - "node_modules/grunt-cli/bin/grunt chmod:pharbits"
+        - "node_modules/grunt-cli/bin/grunt clean:deploy"
+        - "node_modules/grunt-cli/bin/grunt shell:mkdeploy"
+        - "node_modules/grunt-cli/bin/grunt shell:fpmrpm"

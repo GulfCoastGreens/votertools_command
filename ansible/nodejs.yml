@@ -1,0 +1,10 @@
+---
+- name: Install node.js packages
+  dnf: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+      - nodejs
+      - nodejs-devel
+      - npm
+  when: inventory_hostname == "fedora"

@@ -1,0 +1,32 @@
+---
+- name: Install the php packages (DNF)
+  dnf: name={{ item }} state=present
+  with_items:
+      - php
+      - php-common
+      - php-cli
+      - php-bcmath
+      - php-devel
+      - php-fpm
+      - php-gd
+      - php-ldap
+      - php-soap
+      - php-intl
+      - php-mbstring
+      - php-mcrypt
+      - php-pdo
+      - php-xml
+      - php-process
+      - php-pecl-redis
+      - php-tidy
+      - php-pear
+      - php-mysql
+      - php-pdo_dblib
+      - php-pecl-xdebug
+  when: inventory_hostname == "fedora"
+  
+- name: PHP phar.readonly turned Off
+  ini_file: 
+    dest: /etc/php.ini 
+    section: Phar option=phar.readonly 
+    value: Off

@@ -8,3 +8,4 @@ deploy/*.rpm
 deploy/*.deb
 /npm-debug.log
 /deploy/
+/ansible/playbook.retry
