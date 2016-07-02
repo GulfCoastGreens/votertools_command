@@ -26,7 +26,4 @@
   when: inventory_hostname == "fedora"
   
 - name: PHP phar.readonly turned Off
-  ini_file: 
-    dest: /etc/php.ini 
-    section: Phar option=phar.readonly 
-    value: Off
+  ini_file: dest=/etc/php.ini section=Phar option=phar.readonly value=Off
