@@ -126,10 +126,18 @@
       register: result
       with_items: "{{ debfind.files }}"
       when: inventory_hostname == "debian"
-#    - name: Copy over the rpm to the local system
-#      fetch:
-#        src: "{{ item.path }}"
-#        dest: "./packages/"
-#        flat: yes
-#      with_items: "{{ rpmfind.files }}"
+    - name: Copy over the rpm to the local system
+      fetch:
+        src: "{{ item.path }}"
+        dest: "./deploy/"
+        flat: yes
+      with_items: "{{ rpmfind.files }}"
+      when: inventory_hostname == "fedora"
+    - name: Copy over the deb to the local system
+      fetch:
+        src: "{{ item.path }}"
+        dest: "./deploy/"
+        flat: yes
+      with_items: "{{ debfind.files }}"
+      when: inventory_hostname == "debian"
         
