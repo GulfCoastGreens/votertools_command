@@ -10,6 +10,15 @@
     - rubygems
     - rpm-build
   when: inventory_hostname == "fedora"
-
+- name: Installing ruby/gems
+  apt: 
+    name: "{{item}}" 
+    state: installed
+  with_items:
+    - git
+    - ruby
+    - rubygems
+    - ruby-dev
+  when: inventory_hostname == "debian"
 - name: Ensure the fpm gem installed
   command: gem install fpm

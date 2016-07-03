@@ -74,18 +74,13 @@ module.exports = function (grunt) {
             "command": [
                 [ 
                   '/usr/local/bin/fpm -s dir -t deb -n \'<%= appEnv.name %>\' -v <%= appEnv.version %> ',
-                  '"php"', 
-                  '"php-common"', 
-                  '"php-mysqlnd"', 
-                  '"php-pdo"', 
-                  '"php-devel"', 
-                  '"php-pear"', 
-                  '"php-gd"',
-                  '"php-mcrypt"',
-                  '"php-xml"',
-                  '"php-mbstring"',
-                  '"php-xml"',
-                  '"php-cli"'
+                  '"php5"', 
+                  '"php5-common"', 
+                  '"php5-mysql"', 
+                  '"php5-devel"', 
+                  '"php5-gd"',
+                  '"php5-mcrypt"',
+                  '"php5-cli"'
                 ].join(' -d '), 
                 '--config-files /usr/local/etc/votertools/votertools.yml -p deploy ./bin/votertools.phar=/usr/local/bin/votertools ./config/votertools.yml=/usr/local/etc/votertools/votertools.yml'
             ].join(' ')

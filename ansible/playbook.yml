@@ -1,5 +1,7 @@
 ---
-- hosts: fedora
+- hosts: fedora, debian
+  vars_files:
+    - settings.yml
   gather_facts: false
   remote_user: root
   tasks:
@@ -13,13 +15,33 @@
         name: "*" 
         state: latest
       when: inventory_hostname == "fedora"
+    - name: Update packages
+      apt: update_cache=yes
+      when: inventory_hostname == "debian"
     - name: Debug vars
       debug: var=remote_user 
     - name: Add composer
       include: composeroauth.yml
       vars:
         composer_user: "{{ remote_user }}"
-        composer_working_directory: "/home/{{ remote_user }}"
+        composer_working_directory: "{{ app_install_path }}"
+    #### saq application configuration
+    - name: check out latest saq code from GitHub
+      git:  
+        repo: "{{ git_url }}"
+        dest: "{{ app_install_path }}"
+        force: yes
+        version: master
+      tags:
+        -saq
+        -deploy-app
+    - name: Change the ownership of the git repo to the vagrant user
+      file: 
+        dest: "{{ app_install_path }}"
+        owner: "{{ remote_user }}" 
+        group: "{{ remote_user }}" 
+        recurse: yes
+    
     - name: Add nodejs
       include: nodejs.yml
     - name: Configure PHP
@@ -29,7 +51,7 @@
     - name: Update composer dependencies
       composer:
         command: "{{ item }}"
-        working_dir: "/{{ remote_user }}"
+        working_dir: "{{ app_install_path }}"
       become: yes
       become_user: "{{ remote_user }}"   
       with_items:
@@ -40,7 +62,7 @@
       become: yes
       become_user: "{{ remote_user }}"   
       args:
-        chdir: "/{{ remote_user }}"
+        chdir: "{{ app_install_path }}"
       register: result
       with_items:
         - "npm cache clean"
@@ -52,15 +74,44 @@
         - "node_modules/grunt-cli/bin/grunt chmod:pharbits"
         - "node_modules/grunt-cli/bin/grunt clean:deploy"
         - "node_modules/grunt-cli/bin/grunt shell:mkdeploy"
+    - name: Build the RPM package
+      shell: "{{ item }}"
+      become: yes
+      become_user: "{{ remote_user }}"   
+      args:
+        chdir: "{{ app_install_path }}"
+      register: result
+      with_items:
         - "node_modules/grunt-cli/bin/grunt shell:fpmrpm"
+      when: inventory_hostname == "fedora"
+    - name: Build the DEB package
+      shell: "{{ item }}"
+      become: yes
+      become_user: "{{ remote_user }}"   
+      args:
+        chdir: "{{ app_install_path }}"
+      register: result
+      with_items:
+        - "node_modules/grunt-cli/bin/grunt shell:fpmdeb"
+      when: inventory_hostname == "debian"
     - name: Find the RPM that was produced and send it to yum
       find: 
-        paths: "/vagrant/deploy" 
+        paths: "{{ app_install_path }}/deploy" 
         patterns: "*.rpm"
       register: rpmfind
       when: inventory_hostname == "fedora"
+    - name: Find the .deb that was produced and send it to yum
+      find: 
+        paths: "{{ app_install_path }}/deploy" 
+        patterns: "*.deb"
+      register: debfind
+      when: inventory_hostname == "debian"
     - name: Debug vars
       debug: var=rpmfind         
+      when: inventory_hostname == "fedora"
+    - name: Debug vars
+      debug: var=debfind         
+      when: inventory_hostname == "debian"
     - name: Install the rpm
       dnf:
         name: "{{ item.path }}"
@@ -68,6 +119,13 @@
       register: result
       with_items: "{{ rpmfind.files }}"
       when: inventory_hostname == "fedora"
+    - name: Install the deb
+      apt: 
+        deb: "{{ item.path }}"
+        state: present
+      register: result
+      with_items: "{{ debfind.files }}"
+      when: inventory_hostname == "debian"
 #    - name: Copy over the rpm to the local system
 #      fetch:
 #        src: "{{ item.path }}"

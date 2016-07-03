@@ -1,0 +1,6 @@
+---
+# Store all of the variables that should be the same for the entire group here
+
+app_install_path: /tmp/votertools
+
+git_url: https://{{composer_github_oauth}}:x-oauth-basic@github.com/GulfCoastGreens/votertools_command.git

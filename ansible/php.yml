@@ -1,6 +1,8 @@
 ---
 - name: Install the php packages (DNF)
-  dnf: name={{ item }} state=present
+  dnf: 
+    name: "{{ item }}" 
+    state: present
   with_items:
       - php
       - php-common
@@ -24,6 +26,22 @@
       - php-pdo_dblib
       - php-pecl-xdebug
   when: inventory_hostname == "fedora"
+
+- name: Install the php packages (DEB)
+  apt: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+      - php5
+      - php5-common
+      - php5-cli
+  when: inventory_hostname == "debian"
   
-- name: PHP phar.readonly turned Off
+- name: PHP phar.readonly turned Off (RPM)
   ini_file: dest=/etc/php.ini section=Phar option=phar.readonly value=Off
+  when: inventory_hostname == "fedora"
+  
+- name: PHP phar.readonly turned Off (DEB)
+  ini_file: dest=/etc/php5/cli/php.ini section=Phar option=phar.readonly value=Off
+  when: inventory_hostname == "debian"
+  

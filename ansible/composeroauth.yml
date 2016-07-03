@@ -1,5 +1,5 @@
 ---
-- name: Install composer dependencies
+- name: Install composer dependencies (DNF)
   dnf:
     name: "{{ item }}"
     state: present
@@ -8,6 +8,14 @@
       - curl
       - libcurl
       - php
+- name: Install composer dependencies (APT)
+  apt:
+    name: "{{ item }}"
+    state: present
+  when: inventory_hostname == "debian"
+  with_items:
+      - curl
+      - php5
       
 - name: Install composer
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
