@@ -1,0 +1,63 @@
+---
+#### saq application configuration
+- name: check out latest app code from GitHub
+  git:  
+    repo: "{{ git_url }}"
+    dest: "{{ app_install_path }}"
+    force: yes
+    version: master
+  tags:
+    -deploy-app
+- name: Change the ownership of the git repo to the vagrant user
+  file: 
+    dest: "{{ app_install_path }}"
+    owner: "{{ remote_user }}" 
+    group: "{{ remote_user }}" 
+    recurse: yes
+- name: Update composer dependencies
+  composer:
+    command: "{{ item }}"
+    working_dir: "{{ app_install_path }}"
+  become: yes
+  become_user: "{{ remote_user }}"   
+  with_items:
+    - install
+    - update
+- name: Build the package
+  shell: "{{ item }}"
+  become: yes
+  become_user: "{{ remote_user }}"   
+  args:
+    chdir: "{{ app_install_path }}"
+  register: result
+  with_items:
+    - "npm cache clean"
+    - "npm prune"
+    - "npm install --ignore-scripts"
+    - "rm -rf bin"
+    - "mkdir -p bin"
+    - "vendor/bin/box build"
+    - "node_modules/grunt-cli/bin/grunt chmod:pharbits"
+    - "node_modules/grunt-cli/bin/grunt clean:deploy"
+    - "node_modules/grunt-cli/bin/grunt shell:mkdeploy"
+- name: Build the RPM package
+  shell: "{{ item }}"
+  become: yes
+  become_user: "{{ remote_user }}"   
+  args:
+    chdir: "{{ app_install_path }}"
+  register: result
+  with_items:
+    - "node_modules/grunt-cli/bin/grunt shell:fpmrpm"
+  when: inventory_hostname == "fedora"
+- name: Build the DEB package
+  shell: "{{ item }}"
+  become: yes
+  become_user: "{{ remote_user }}"   
+  args:
+    chdir: "{{ app_install_path }}"
+  register: result
+  with_items:
+    - "node_modules/grunt-cli/bin/grunt shell:fpmdeb"
+  when: inventory_hostname == "debian"
+
