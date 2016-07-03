@@ -129,14 +129,14 @@
     - name: Copy over the rpm to the local system
       fetch:
         src: "{{ item.path }}"
-        dest: "./deploy/"
+        dest: "../deploy/"
         flat: yes
       with_items: "{{ rpmfind.files }}"
       when: inventory_hostname == "fedora"
     - name: Copy over the deb to the local system
       fetch:
         src: "{{ item.path }}"
-        dest: "./deploy/"
+        dest: "../deploy/"
         flat: yes
       with_items: "{{ debfind.files }}"
       when: inventory_hostname == "debian"
