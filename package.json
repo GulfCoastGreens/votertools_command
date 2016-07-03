@@ -1,9 +1,12 @@
 {
   "name": "votertools",
   "version": "0.0.3",
+  "release": "1",
   "description": "A command line package to handle voter registration integration with CiviCRM",
   "dependencies": {},
   "private": true,
+  "license" : "Apache-2.0",
+  "homepage": "https://github.com/GulfCoastGreens/votertools_command",
   "devDependencies": {
     "bower": "1.7.7",
     "grunt": "0.4.5",
