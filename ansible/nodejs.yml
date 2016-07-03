@@ -9,7 +9,7 @@
       - npm
   when: inventory_hostname == "fedora"
 - name: Setup Nodejs
-  shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  shell: curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
   when: inventory_hostname == "debian"
 - name: Installing Nodejs packages!
   apt: 
