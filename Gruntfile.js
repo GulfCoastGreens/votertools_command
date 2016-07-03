@@ -77,7 +77,7 @@ module.exports = function (grunt) {
                   '"php5"', 
                   '"php5-common"', 
                   '"php5-mysql"', 
-                  '"php5-devel"', 
+                  '"php5-dev"', 
                   '"php5-gd"',
                   '"php5-mcrypt"',
                   '"php5-cli"'
