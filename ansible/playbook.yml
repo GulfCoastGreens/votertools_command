@@ -59,27 +59,27 @@
         name: "{{ item.path }}"
         state: present
       register: result
-      with_items: "{{ rpmfind.files }}"
+      with_items: "{{ rpmfind.files|default([]) }}"
       when: inventory_hostname == "fedora"
     - name: Install the deb
       apt: 
         deb: "{{ item.path }}"
         state: present
       register: result
-      with_items: "{{ debfind.files }}"
+      with_items: "{{ debfind.files|default([]) }}"
       when: inventory_hostname == "debian"
     - name: Copy over the rpm to the local system
       fetch:
         src: "{{ item.path }}"
         dest: "../deploy/"
         flat: yes
-      with_items: "{{ rpmfind.files }}"
+      with_items: "{{ rpmfind.files|default([]) }}"
       when: inventory_hostname == "fedora"
     - name: Copy over the deb to the local system
       fetch:
         src: "{{ item.path }}"
         dest: "../deploy/"
         flat: yes
-      with_items: "{{ debfind.files }}"
+      with_items: "{{ debfind.files|default([]) }}"
       when: inventory_hostname == "debian"
         
