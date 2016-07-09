@@ -10,13 +10,16 @@
       when: inventory_hostname == "fedora"
     - name: gather facts
       setup: 
-    - name: upgrade all packages
+    - name: upgrade all packages (DNF)
       dnf: 
         name: "*" 
         state: latest
       when: inventory_hostname == "fedora"
-    - name: Update packages
+    - name: Update apt cache
       apt: update_cache=yes
+      when: inventory_hostname == "debian"
+    - name: Update all packages (APT)
+      apt: upgrade=dist
       when: inventory_hostname == "debian"
     - name: Debug vars
       debug: var=remote_user 
