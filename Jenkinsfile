@@ -5,6 +5,8 @@ node ('master'){
   
   // env.PATH = "${tool 'Maven 3'}/bin:${env.PATH}"
   checkout scm
+  sh 'curl -sS https://getcomposer.org/installer | php'
+  sh 'mv composer.phar composer'
   sh 'npm install'
   sh 'node_modules/grunt-cli/bin/grunt build'
   // sh 'mvn clean package'
