@@ -38,6 +38,22 @@ trait FloridaVoters {
             echo "Failed executing florida/PartyHistoriesAppend \n";
         }
     }
+    public function buildFloridaEmailUpdateSQL($voterIds,$maxlines = 12000) {
+        foreach ($voterIds as $id) {
+            $email = \filter_var($this->getConnection($this->connectionName)->select("Voters",'email_address',[
+                 "`voter_id`" => $id
+            ]), \FILTER_SANITIZE_EMAIL);
+            if(\filter_var($email, \FILTER_VALIDATE_EMAIL)) {
+                $insertsql = [];
+                $insertsql[] = "INSERT INTO civicrm_email (contact_id,location_type_id,email) ";
+                $insertsql[] = "SELECT (SELECT `entity_id` FROM `{$this->config['voter']['florida']['civicrm']['tablename']}` v WHERE `{$this->config['voter']['florida']['civicrm']['voterIDfield']}` = ".$this->getConnection($this->connectionName)->pdo->quote($id).") AS `contact_id`,";
+                $insertsql[] = "(SELECT `id` FROM `civicrm_location_type` WHERE `name` = 'Home' LIMIT 1) AS `location_type_id`,";
+                $insertsql[] = $this->getConnection($this->connectionName)->pdo->quote($email)." AS `email` FROM DUAL ";
+                $insertsql[] = "WHERE (SELECT COUNT(*) FROM civicrm_email) WHERE email = ".$this->getConnection($this->connectionName)->pdo->quote($email).") < 1;";
+                
+            }
+        }
+    }
     public function buildFloridaPartyUpdateSQL($voterIds,$maxlines = 12000) {
         // partyhistorytablename
         // 
