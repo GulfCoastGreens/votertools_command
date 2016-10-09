@@ -11,4 +11,5 @@ node ('master'){
   sh 'npm install'
   sh 'node_modules/grunt-cli/bin/grunt build'
   // sh 'mvn clean package'
+  sh '\\cp deploy/votertools-*.x86_64.rpm $JENKINS_HOME'
 }
