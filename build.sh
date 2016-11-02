@@ -8,7 +8,7 @@ mkdir -p bin
 echo "**************************************************************************"
 echo "* Building the bin/votertools.phar file                                  *"
 echo "**************************************************************************"
-vendor/bin/box build
+php -dphar.readonly=0 vendor/bin/box build
 echo "**************************************************************************"
 echo "* Note: php.ini must have phar.readonly = Off set to build the phar file *"
 echo "**************************************************************************"
