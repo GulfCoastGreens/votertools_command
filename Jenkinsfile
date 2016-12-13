@@ -5,6 +5,9 @@ node ('master'){
   
   // env.PATH = "${tool 'Maven 3'}/bin:./:${env.PATH}"
   checkout scm
+  stage('Install fpm gem') {
+      sh 'gem install fpm'
+  }
   stage('Get PHP Composer') {
       sh 'curl -sS https://getcomposer.org/installer | php'
       sh "mv composer.phar ${env.JENKINS_HOME}/bin/composer"
