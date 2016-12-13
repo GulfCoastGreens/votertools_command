@@ -1,0 +1,5 @@
+---
+- src: https://github.com/USF-IT/ansible-role-usf-mulesoft.git
+  version: master
+  scm: git
+  name: mulesoft
