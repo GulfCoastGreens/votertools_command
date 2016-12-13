@@ -1,0 +1,85 @@
+---
+- hosts: fedora, debian
+  vars_files:
+    - settings.yml
+  gather_facts: false
+  remote_user: root
+  tasks:
+    - name: install packages for ansible support
+      raw: dnf -y -e0 -d0 install python python-dnf  
+      when: inventory_hostname == "fedora"
+    - name: gather facts
+      setup: 
+    - name: upgrade all packages (DNF)
+      dnf: 
+        name: "*" 
+        state: latest
+      when: inventory_hostname == "fedora"
+    - name: Update apt cache
+      apt: update_cache=yes
+      when: inventory_hostname == "debian"
+    - name: Update all packages (APT)
+      apt: upgrade=dist
+      when: inventory_hostname == "debian"
+    - name: Debug vars
+      debug: var=remote_user 
+    - name: Add nodejs
+      include: nodejs.yml
+    - name: Configure PHP
+      include: php.yml
+    - name: Add composer
+      include: composeroauth.yml
+      vars:
+        composer_user: "{{ remote_user }}"
+        composer_working_directory: "{{ app_install_path }}"    
+    - name: Configure GEMS fpm
+      include: gems_fpm.yml
+    - name: Build Application
+      include: buildapp.yml
+    - name: Find the RPM that was produced and send it to yum
+      find: 
+        paths: "{{ app_install_path }}/deploy" 
+        patterns: "*.rpm"
+      register: rpmfind
+      when: inventory_hostname == "fedora"
+    - name: Find the .deb that was produced and send it to yum
+      find: 
+        paths: "{{ app_install_path }}/deploy" 
+        patterns: "*.deb"
+      register: debfind
+      when: inventory_hostname == "debian"
+    - name: Debug vars
+      debug: var=rpmfind         
+      when: inventory_hostname == "fedora"
+    - name: Debug vars
+      debug: var=debfind         
+      when: inventory_hostname == "debian"
+    - name: Install the rpm
+      dnf:
+        name: "{{ item.path }}"
+        state: present
+      register: result
+      with_items: "{{ rpmfind.files|default([]) }}"
+      when: inventory_hostname == "fedora"
+    - name: Install the deb
+      apt: 
+        deb: "{{ item.path }}"
+        state: present
+      register: result
+      with_items: "{{ debfind.files|default([]) }}"
+      when: inventory_hostname == "debian"
+    - name: Copy over the rpm to the local system
+      fetch:
+        src: "{{ item.path }}"
+        dest: "../deploy/"
+        flat: yes
+      with_items: "{{ rpmfind.files|default([]) }}"
+      when: inventory_hostname == "fedora"
+    - name: Copy over the deb to the local system
+      fetch:
+        src: "{{ item.path }}"
+        dest: "../deploy/"
+        flat: yes
+      with_items: "{{ debfind.files|default([]) }}"
+      when: inventory_hostname == "debian"
+        
