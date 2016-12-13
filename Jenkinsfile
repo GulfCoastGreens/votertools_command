@@ -12,7 +12,7 @@ node ('master'){
   
   stage('Run Ansible Playbook') {
       // Run the maven build
-      sh "ansible-playbook -i 'localhost,' -c local ansible/playbook.yml --extra-vars 'composer_github_oauth=${env.GITHUB_OAUTH_KEY'}"
+      sh "ansible-playbook -i 'localhost,' -c local ansible/playbook.yml --extra-vars 'composer_github_oauth=${env.GITHUB_OAUTH_KEY}'"
       archiveArtifacts artifacts: 'deploy/votertools-*.x86_64.rpm'
       archiveArtifacts artifacts: 'deploy/votertools*amd64.deb'
   }
