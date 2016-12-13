@@ -14,6 +14,7 @@ node ('master'){
       // Run the maven build
       sh "ansible-playbook -i 'localhost,' -c local ansible/playbook.yml"
       archiveArtifacts artifacts: 'deploy/votertools-*.x86_64.rpm'
+      archiveArtifacts artifacts: 'deploy/votertools*amd64.deb'
   }
 
   // sh 'mvn clean package'
