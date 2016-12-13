@@ -1,13 +1,13 @@
 node ('master'){
   def nodeHome = tool name: 'nodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-  def workspace = pwd()
-  env.PATH = "${nodeHome}/bin:${workspace}:${env.PATH}"
+  // def workspace = pwd()
+  env.PATH = "${nodeHome}/bin:${env.JENKINS_HOME}/bin:${env.PATH}"
   
   // env.PATH = "${tool 'Maven 3'}/bin:./:${env.PATH}"
   checkout scm
   stage('Get PHP Composer') {
       sh 'curl -sS https://getcomposer.org/installer | php'
-      sh 'mv composer.phar composer'
+      sh "mv composer.phar ${env.JENKINS_HOME}/bin/composer"
   }
   stage('Install Nodejs dependencies') {
       sh 'npm install'
