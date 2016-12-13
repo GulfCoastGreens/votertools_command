@@ -9,10 +9,10 @@ node ('master'){
   stage('Get Ansible Roles') {
       sh 'ansible-galaxy install -r ansible/requirements.yml -p ansible/roles/ -f -vvv'
   }
-
+  
   stage('Run Ansible Playbook') {
       // Run the maven build
-      sh "ansible-playbook -i 'localhost,' -c local ansible/playbook.yml"
+      sh "ansible-playbook -i 'localhost,' -c local ansible/playbook.yml --extra-vars 'composer_github_oauth=${env.GITHUB_OAUTH_KEY'}"
       archiveArtifacts artifacts: 'deploy/votertools-*.x86_64.rpm'
       archiveArtifacts artifacts: 'deploy/votertools*amd64.deb'
   }
