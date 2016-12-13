@@ -12,4 +12,6 @@ node ('master'){
   sh 'node_modules/grunt-cli/bin/grunt build'
   // sh 'mvn clean package'
   sh '\\cp deploy/votertools-*.x86_64.rpm $JENKINS_HOME'
+  // Archive the build output artifacts.
+  archiveArtifacts artifacts: 'deploy/votertools-*.x86_64.rpm'
 }
