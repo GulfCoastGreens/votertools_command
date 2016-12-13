@@ -13,21 +13,6 @@ node ('master'){
   stage('Run Ansible Playbook') {
       // Run the maven build
       sh "ansible-playbook -i 'localhost,' -c local ansible/playbook.yml"
-  }
-
-  stage('Install fpm gem') {
-      sh 'gem install fpm'
-  }
-  stage('Get PHP Composer') {
-      sh 'curl -sS https://getcomposer.org/installer | php'
-      sh "mv composer.phar ${env.JENKINS_HOME}/bin/composer"
-  }
-  stage('Install Nodejs dependencies') {
-      sh 'npm install'
-  }
-  stage('Build with Grunt') {
-      sh 'node_modules/grunt-cli/bin/grunt build'  
-      // Archive the build output artifacts.
       archiveArtifacts artifacts: 'deploy/votertools-*.x86_64.rpm'
   }
 
