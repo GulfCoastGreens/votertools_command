@@ -5,6 +5,11 @@ node ('master'){
   
   // env.PATH = "${tool 'Maven 3'}/bin:./:${env.PATH}"
   checkout scm
+
+  stage('Get Ansible Roles') {
+      sh 'ansible-galaxy install -r ansible/requirements.yml -p ansible/roles/ -f -vvv'
+  }
+
   stage('Install fpm gem') {
       sh 'gem install fpm'
   }

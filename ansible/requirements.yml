@@ -1,5 +1,5 @@
 ---
-- src: https://github.com/USF-IT/ansible-role-usf-mulesoft.git
+- src: https://github.com/GulfCoastGreens/ansible-role-votertools.git
   version: master
   scm: git
-  name: mulesoft
+  name: votertools
