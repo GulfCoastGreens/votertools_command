@@ -4,6 +4,8 @@
     - ./vars/main.yml
 #  roles:
 #    - votertools
+  vars:
+    package_settings: "{{ skip_var | default(lookup('file','../package.json') | from_json) }}"
   tasks:
     - name: Execute the build
       include_tasks: build.yml
