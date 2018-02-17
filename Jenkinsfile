@@ -12,7 +12,7 @@ node ('master'){
   }
 
   stage('Build VoterTool Command-line tool') {
-    sh('#!/bin/sh -e\n' + "ansible-playbook -i 'localhost,' -c local --vault-password-file=${env.env.USF_ANSIBLE_VAULT_KEY_YMD} ansible/playbook.yml --extra-vars 'target_hosts=all jenkins_home=${env.JENKINS_HOME} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t build")
+    sh('#!/bin/sh -e\n' + "ansible-playbook -i 'localhost,' -c local --vault-password-file=${env.USF_ANSIBLE_VAULT_KEY_YMD} ansible/playbook.yml --extra-vars 'target_hosts=all jenkins_home=${env.JENKINS_HOME} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t build")
 
 
       // Run the maven build
