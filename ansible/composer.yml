@@ -1,0 +1,11 @@
+---
+- name: Install composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=~/bin --filename=composer
+  args: 
+    creates: ~/bin/composer
+- name: Setup oauth key for composer
+  composer:
+    command: config
+    working_dir: "{{ jenkins_home }}"
+    arguments: "--global github-oauth.github.com {{ ansible_env.GITHUB_OAUTH_KEY }}"
+  no_log: True
