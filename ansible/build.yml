@@ -30,4 +30,12 @@
     - "mkdir -p deploy"
     - "node_modules/grunt-cli/bin/grunt shell:fpmrpm"
     - "node_modules/grunt-cli/bin/grunt shell:fpmdeb"
+- name: Build votertools command RPM and DEB
+  shell: "{{ item }}"
+  args:
+    chdir: "../"
+  with_items:
+    - "fpm -s dir -t rpm -n {{ package_settings.name | quote }} -v {{ package_settings.version | quote }} --iteration {{ package_revision | quote }} --description {{ package_settings.description | quote }} --url {{ package_settings.homepage | quote }} --license {{ package_settings.license | quote }} --vendor {{ 'Gulf Coast Greens' | quote }} -d {{ 'php' | quote }} -d {{ 'php-common' | quote }} -d {{ 'php-mysqlnd' | quote }} -d {{ 'php-pdo' | quote }} -d {{ 'php-devel' | quote }} -d {{ 'php-pear' | quote }} -d {{ 'php-gd' | quote }} -d {{ 'php-mcrypt' | quote }} -d {{ 'php-xml' | quote }} -d {{ 'php-mbstring' | quote }} -d {{ 'php-xml' | quote }} -d {{ 'php-cli' | quote }} --config-files /usr/local/etc/votertools/votertools.yml -p deploy ./bin/votertools.phar=/usr/local/bin/votertools ./config/votertools.yml=/usr/local/etc/votertools/votertools.yml"
+    - "fpm -s dir -t deb -n {{ package_settings.name | quote }} -v {{ package_settings.version | quote }} --iteration {{ package_revision | quote }} --description {{ package_settings.description | quote }} --url {{ package_settings.homepage | quote }} --license {{ package_settings.license | quote }} --vendor {{ 'Gulf Coast Greens' | quote }} -d {{ 'php5' | quote }} -d {{ 'php5-common' | quote }} -d {{ 'php5-mysql' | quote }} -d {{ 'php5-dev' | quote }} -d {{ 'php5-gd' | quote }} -d {{ 'php5-mcrypt' | quote }} -d {{ 'php5-cli' | quote }} --config-files /usr/local/etc/votertools/votertools.yml -p deploy ./bin/votertools.phar=/usr/local/bin/votertools ./config/votertools.yml=/usr/local/etc/votertools/votertools.yml"
+
 
