@@ -12,13 +12,13 @@ node ('master'){
   }
 
   stage('Build VoterTool Command-line tool') {
-    sh('#!/bin/sh -e\n' + "ansible-playbook -i 'localhost,' -c local --vault-password-file=${env.USF_ANSIBLE_VAULT_KEY_YMD} ansible/playbook.yml --extra-vars 'target_hosts=all jenkins_home=${env.JENKINS_HOME} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t build")
+    sh('#!/bin/sh -e\n' + "ansible-playbook -i 'localhost,' -c local --vault-password-file=${env.YMD_ANSIBLE_VAULT_KEY} ansible/playbook.yml --extra-vars 'target_hosts=all jenkins_home=${env.JENKINS_HOME} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t build")
     archiveArtifacts artifacts: 'deploy/votertools-*.x86_64.rpm'
     archiveArtifacts artifacts: 'deploy/votertools*amd64.deb'
   }
   stage('Deploy and setup VoterTool Command-line tool') {
     sshagent (credentials: ['operations']) {
-      sh('#!/bin/sh -e\n' + "ansible-playbook -i ansible/roles/inventory/${env.DEPLOY_ENV.toLowerCase()}/hosts --user=jenkins --vault-password-file=${env.DEPLOY_KEY} ansible/playbook.yml --extra-vars 'target_hosts=${env.DEPLOY_HOST} java_home=${env.JAVA_HOME} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER} local_repo=${env.JENKINS_HOME}/repos/redhat/7/x86_64' -b -t deploy -vvv")
+      sh('#!/bin/sh -e\n' + "ansible-playbook -i ansible/roles/inventory/${env.DEPLOY_ENV.toLowerCase()}/hosts --user=jenkins --vault-password-file=${env.YMD_ANSIBLE_VAULT_KEY} ansible/playbook.yml --extra-vars 'target_hosts=${env.DEPLOY_HOST} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t deploy -vvv")
     }
   }
 }
