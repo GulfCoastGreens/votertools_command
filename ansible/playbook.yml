@@ -11,3 +11,7 @@
       include_tasks: build.yml
       tags:
         - build
+    - name: Execute the deploy
+      include_tasks: deploy.yml
+      tags:
+        - deploy

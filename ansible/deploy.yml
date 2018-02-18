@@ -1,0 +1,12 @@
+---
+- name: create bin folder
+  file: 
+    path: ~/bin
+    state: "{{ item }}"
+  with_items:
+    - directory
+- name: Copy PHAR to remote host
+  copy:
+    src: "../bin/votertools.phar"
+    dest: ~/bin/votertools
+
