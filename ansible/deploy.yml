@@ -1,10 +1,11 @@
 ---
-- name: create bin folder
+- name: create bin and etc folders in home folder
   file: 
-    path: ~/bin
-    state: "{{ item }}"
+    path: "{{ item }}"
+    state: directory
   with_items:
-    - directory
+    - ~/bin
+    - ~/etc/votertools
 - name: Copy PHAR to remote host
   copy:
     src: "../bin/votertools.phar"
@@ -12,4 +13,10 @@
 - file:
     path: ~/bin/votertools
     mode: 0755
+- name: create votertools config
+  template:
+    src="../templates/votertools.yml.j2"
+    dest="~/etc/votertools/votertools.yml"
+    mode=0644
+    backup=no
 
