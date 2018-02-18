@@ -1,5 +1,5 @@
 ---
-- src: https://github.com/GulfCoastGreens/ansible-role-votertools.git
+- src: ssh://git@github.com/GulfCoastGreens/inventory.git
   version: master
   scm: git
-  name: votertools
+  name: inventory
