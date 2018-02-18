@@ -2,6 +2,7 @@
 - hosts: "{{ target_hosts }}"
   vars_files:
     - ./vars/main.yml
+    - ./vars/vault.yml
 #  roles:
 #    - votertools
   vars:
