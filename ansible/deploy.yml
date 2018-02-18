@@ -9,4 +9,7 @@
   copy:
     src: "../bin/votertools.phar"
     dest: ~/bin/votertools
+- file:
+    path: ~/bin/votertools
+    mode: 0755
 
