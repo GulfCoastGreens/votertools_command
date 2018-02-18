@@ -28,8 +28,8 @@
   with_items:
     - 'rm -rf deploy'
     - "mkdir -p deploy"
-    - "node_modules/grunt-cli/bin/grunt shell:fpmrpm"
-    - "node_modules/grunt-cli/bin/grunt shell:fpmdeb"
+#    - "node_modules/grunt-cli/bin/grunt shell:fpmrpm"
+#    - "node_modules/grunt-cli/bin/grunt shell:fpmdeb"
 - name: Build votertools command RPM and DEB
   shell: "{{ item }}"
   args:
