@@ -41,6 +41,7 @@ class FloridaCiviCRMVoterIdsCommand  extends Command {
     }
     // GetCiviCRMFloridaVoters.sql
     $output->writeln("anything");
-    $output->writeln(\json_encode($this->voterService->getVoterIds()));
+    $result = $this->voterService->getVoterIds();
+    $output->writeln(\json_encode($result));
   }
 }
