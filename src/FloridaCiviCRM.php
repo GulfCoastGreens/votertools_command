@@ -16,16 +16,17 @@ trait FloridaCiviCRM {
   //put your code here
   public function getVoterIds() {
     $votertable = $this->config['voter']['florida']['civicrm']['tablename'];
-    $voterregistrationIDfield = \array_flip($this->config['voter']['florida']['civicrm']['voterFieldMap'])[$this->config['voter']['florida']['civicrm']['voterIDfield']];
+    // $voterregistrationIDfield = \array_flip($this->config['voter']['florida']['civicrm']['voterFieldMap'])[$this->config['voter']['florida']['civicrm']['voterIDfield']];
+    $voterregistrationIDfield = $this->config['voter']['florida']['civicrm']['voterIDfield'];
     $voterids = [];
-//    if($voters = $this->getConnection($this->connectionName)->select($votertable,[
-//      "$voterregistrationIDfield"
-//    ], 
-//    Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'))) {
-//      return [$voters];
-//    } else {
-//      return [];
-//    }
-    return [ $votertable, $voterregistrationIDfield ];
+    if($voters = $this->getConnection($this->connectionName)->select($votertable,[
+      "$voterregistrationIDfield"
+    ], 
+    Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'))) {
+      return [$voters];
+    } else {
+      return [$votertable, $voterregistrationIDfield];
+    }
+//    return [ $votertable, $voterregistrationIDfield ];
   }
 }
