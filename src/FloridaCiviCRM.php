@@ -22,7 +22,7 @@ trait FloridaCiviCRM {
       "$voterregistrationIDfield"
     ], 
     Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'))) {
-      return $voters;
+      return [$voters];
     } else {
       return [];
     }
