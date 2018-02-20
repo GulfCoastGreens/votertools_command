@@ -17,6 +17,7 @@ class VoterService extends \GCG\Core\Connection {
     use VoterFormating;
     use GeorgiaVoters;
     use FloridaVoters;
+    use FloridaCiviCRM;
     public $dbh;
     
     public $connectionName;

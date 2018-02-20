@@ -1,0 +1,4 @@
+---
+- name: Build the package
+  shell: "~/bin/votertools florida:civicrmvoterids --config ~/etc/votertools civicrm"
+  register: voteridlist
