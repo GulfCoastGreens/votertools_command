@@ -40,6 +40,6 @@ class FloridaCiviCRMVoterIdsCommand  extends Command {
       $this->voterService->setConfigFolder('/usr/local/etc/votertools');
     }
     // GetCiviCRMFloridaVoters.sql
-    return \json_encode($this->voterService->getVoterIds());
+    $output->writeln(\json_encode($this->voterService->getVoterIds()));
   }
 }
