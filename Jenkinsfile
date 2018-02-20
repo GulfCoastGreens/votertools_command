@@ -21,4 +21,9 @@ node ('master'){
       sh('#!/bin/sh -e\n' + "ansible-playbook -i ansible/roles/inventory/${env.DEPLOY_ENV.toLowerCase()}/hosts --user=jenkins --vault-password-file=${env.YMD_ANSIBLE_VAULT_KEY} ansible/playbook.yml --extra-vars 'target_hosts=${env.DEPLOY_HOST} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t deploy -vvv")
     }
   }
+  stage('Run the data state for VoterTool Command-line tool') {
+    sshagent (credentials: ['operations']) {
+      sh('#!/bin/sh -e\n' + "ansible-playbook -i ansible/roles/inventory/${env.DEPLOY_ENV.toLowerCase()}/hosts --user=jenkins --vault-password-file=${env.YMD_ANSIBLE_VAULT_KEY} ansible/playbook.yml --extra-vars 'target_hosts=${env.DEPLOY_HOST} deploy_env=${env.DEPLOY_ENV} package_revision=${env.BUILD_NUMBER}' -t data -vvv")
+    }
+  }
 }

@@ -16,3 +16,7 @@
       include_tasks: deploy.yml
       tags:
         - deploy
+    - name: Execute the data
+      include_tasks: data.yml
+      tags:
+        - data
