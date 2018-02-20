@@ -26,5 +26,6 @@ trait FloridaCiviCRM {
     } else {
       return [];
     }
+    return [ 'test' ];
   }
 }
