@@ -27,11 +27,15 @@ trait FloridaCiviCRM {
 //    } else {
 //      return [$votertable, $voterregistrationIDfield];
 //    }
-    $voters = $this->getConnection($this->connectionName)->select($votertable,[
-      "$voterregistrationIDfield"
-    ], 
-    Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'));
-    return $this->getConnection($this->connectionName)->error();
+    try {
+      $voters = $this->getConnection($this->connectionName)->select($votertable,[
+        "$voterregistrationIDfield"
+      ], 
+      Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'));
+      return $this->getConnection($this->connectionName)->error();
+    } catch (Exception $e) {
+      return $e;
+    }
 //    return [ $votertable, $voterregistrationIDfield ];
   }
 }
