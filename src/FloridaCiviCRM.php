@@ -19,14 +19,19 @@ trait FloridaCiviCRM {
     // $voterregistrationIDfield = \array_flip($this->config['voter']['florida']['civicrm']['voterFieldMap'])[$this->config['voter']['florida']['civicrm']['voterIDfield']];
     $voterregistrationIDfield = $this->config['voter']['florida']['civicrm']['voterIDfield'];
     $voterids = [];
-    if($voters = $this->getConnection($this->connectionName)->select($votertable,[
+//    if($voters = $this->getConnection($this->connectionName)->select($votertable,[
+//      "$voterregistrationIDfield"
+//    ], 
+//    Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'))) {
+//      return [$voters];
+//    } else {
+//      return [$votertable, $voterregistrationIDfield];
+//    }
+    $voters = $this->getConnection($this->connectionName)->select($votertable,[
       "$voterregistrationIDfield"
     ], 
-    Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'))) {
-      return [$voters];
-    } else {
-      return [$votertable, $voterregistrationIDfield];
-    }
+    Medoo::raw('WHERE LENGTH(<' . $voterregistrationIDfield . '>) > 5'));
+    return $this->getConnection($this->connectionName)->error();
 //    return [ $votertable, $voterregistrationIDfield ];
   }
 }
