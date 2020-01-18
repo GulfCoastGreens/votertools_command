@@ -9,13 +9,13 @@
   "homepage": "https://github.com/GulfCoastGreens/votertools_command",
   "devDependencies": {
     "bower": "1.8.8",
-    "grunt": "0.4.5",
-    "grunt-cli": "1.2.0",
-    "grunt-contrib-clean": "0.7.0",
+    "grunt": "1.0.4",
+    "grunt-cli": "2.0.0",
+    "grunt-contrib-clean": "2.0.0",
     "grunt-contrib-copy": "1.0.0",
-    "grunt-shell": "1.1.2",
-    "load-grunt-tasks": "3.4.0",
-    "time-grunt": "1.3.0",
+    "grunt-shell": "3.0.1",
+    "load-grunt-tasks": "5.1.0",
+    "time-grunt": "2.0.0",
     "grunt-chmod": "~1.1.1"
   },
   "engines": {
