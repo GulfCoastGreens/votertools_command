@@ -8,7 +8,7 @@
   "license" : "Apache-2.0",
   "homepage": "https://github.com/GulfCoastGreens/votertools_command",
   "devDependencies": {
-    "bower": "1.7.7",
+    "bower": "1.8.8",
     "grunt": "0.4.5",
     "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "0.7.0",
